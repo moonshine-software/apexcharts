@@ -19,7 +19,7 @@ class LineChartMetric extends Metric
 
     protected bool $withoutSortKeys = false;
 
-    public function getAssets(): array
+    protected function assets(): array
     {
         return [
             Js::make('vendor/moonshine-apexcharts/apexcharts.js'),
