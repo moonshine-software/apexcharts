@@ -114,9 +114,6 @@ Grid::make([
     <img alt="windows" src="./art/donut_chart_metric_column_span.png">
 </picture>
 
-> [!NOTE]
-> See the [Decoration Layout](https://moonshine-laravel.com/docs/resource/components/components-decoration_layout) section for more details.
-
 ## Metric Line Chart
 
 The ***LineChartMetric*** metric is designed to display line charts.
@@ -262,7 +259,3 @@ Grid::make([
     <source media="(prefers-color-scheme: light)" srcset="./art/line_chart_metric_column_span.png">
     <img alt="windows" src="./art/line_chart_metric_column_span.png">
 </picture>
-
-> [!NOTE]
-> See the [Decoration Layout](https://moonshine-laravel.com/docs/resource/components/components-decoration_layout) section for more details.
-
