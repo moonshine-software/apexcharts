@@ -19,6 +19,8 @@ class LineChartMetric extends Metric
 
     protected bool $withoutSortKeys = false;
 
+    protected string $events = '';
+
     protected function assets(): array
     {
         return [
@@ -84,6 +86,24 @@ class LineChartMetric extends Metric
         return $this->withoutSortKeys;
     }
 
+    public function setEvents(string $events): static
+    {
+        $this->events = $events;
+
+        return $this;
+    }
+
+    public function getEvents(): string
+    {
+        if($this->events === '') {
+            return <<<JS
+            {}
+            JS;
+        }
+
+        return $this->events;
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -93,6 +113,7 @@ class LineChartMetric extends Metric
             'labels' => $this->getLabels(),
             'lines' => $this->getLines(),
             'colors' => $this->getColors(),
+            'events' => $this->getEvents(),
         ];
     }
 }
