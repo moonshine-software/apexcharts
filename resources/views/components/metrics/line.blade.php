@@ -3,18 +3,18 @@
     'lines' => [],
     'colors' => [],
     'labels' => [],
-    'types' => [],
+    'types',
 ])
 <div
     {{ $attributes->merge(['class' => 'chart']) }}
     x-data="charts({
                 series: [
-                @foreach($lines as $lineKey => $line)
+                @foreach($lines as $line)
                     @foreach($line as $label => $values)
                     {
                         name: '{{ $label }}',
                         data: {{ json_encode(array_values($values)) }},
-                        type: '{{ $types[$lineKey][$label] }}',
+                        type: '{{ $types[$loop->parent->index % count($types)][$loop->index % count($types[$loop->parent->index])] }}',
                     },
                     @endforeach
                 @endforeach

@@ -35,7 +35,7 @@ class LineChartMetric extends Metric
     public function line(
         array|Closure $line,
         string|array|Closure $color = '#7843E9',
-        string|array|Closure $type = 'area'
+        string|array|Closure $type = 'line'
     ): static {
         $lines = $line instanceof Closure ? $line() : $line;
         $this->lines[] = $lines;
@@ -51,17 +51,12 @@ class LineChartMetric extends Metric
         $type = $type instanceof Closure ? $type() : $type;
 
         if (is_string($type)) {
-            $this->types[] = array_fill_keys(array_keys($lines), $type);
+            $this->types[][] = $type;
         } else {
             $this->types[] = $type;
         }
 
         return $this;
-    }
-
-    public function getColor(int $index): string
-    {
-        return $this->colors[$index];
     }
 
     public function getColors(): array
