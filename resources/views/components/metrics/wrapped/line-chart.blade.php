@@ -5,6 +5,7 @@
     'colors' => [],
     'columnSpanValue' => 12,
     'adaptiveColumnSpanValue' => 12,
+    'types' => [],
 ])
 <x-moonshine::layout.column
     :colSpan="$columnSpanValue"
@@ -17,6 +18,7 @@
             :colors="$colors"
             :labels="$labels"
             :title="$label"
+            :types="$types"
         />
     </x-moonshine::layout.box>
 </x-moonshine::layout.column>
