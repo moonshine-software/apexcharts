@@ -19,6 +19,8 @@ class LineChartMetric extends Metric
 
     protected bool $withoutSortKeys = false;
 
+    protected int $height = 300;
+
     protected function assets(): array
     {
         return [
@@ -84,6 +86,13 @@ class LineChartMetric extends Metric
         return $this->withoutSortKeys;
     }
 
+    public function setHeight(int $height): static
+    {
+        $this->height = $height;
+
+        return $this;
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -93,6 +102,7 @@ class LineChartMetric extends Metric
             'labels' => $this->getLabels(),
             'lines' => $this->getLines(),
             'colors' => $this->getColors(),
+            'height' => $this->height,
         ];
     }
 }
