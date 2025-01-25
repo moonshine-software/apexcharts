@@ -3,6 +3,7 @@
     'lines' => [],
     'colors' => [],
     'labels' => [],
+    'types',
 ])
 <div
     {{ $attributes->merge(['class' => 'chart']) }}
@@ -13,6 +14,7 @@
                     {
                         name: '{{ $label }}',
                         data: {{ json_encode(array_values($values)) }},
+                        type: '{{ $types[$loop->parent->index % count($types)][$loop->index % count($types[$loop->parent->index])] }}',
                     },
                     @endforeach
                 @endforeach
