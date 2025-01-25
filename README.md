@@ -183,7 +183,9 @@ LineChartMetric::make('Orders')
             ->toArray()
     ],[
         'red', 'blue'
-    ], ['area', 'line']);
+    ], [
+        'area', 'line'
+    ]);
 ```
 
 ### Sorting keys
