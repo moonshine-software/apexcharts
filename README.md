@@ -20,6 +20,7 @@
 ## Installation
 ```shell
 composer require moonshine/apexcharts
+php artisan vendor:publish --tag=moonshine-apexcharts-assets
 ```
 
 ## Metric Donut Chart
