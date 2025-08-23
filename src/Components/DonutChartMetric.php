@@ -18,6 +18,8 @@ class DonutChartMetric extends Metric
 
     protected int $decimals = 3;
 
+    protected int $height = 350;
+
     protected function assets(): array
     {
         return [
@@ -84,6 +86,13 @@ class DonutChartMetric extends Metric
         return $this;
     }
 
+    public function height(int|string $height): static
+    {
+        $this->height = $height;
+
+        return $this;
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -94,6 +103,7 @@ class DonutChartMetric extends Metric
             'values' => $this->getValues(),
             'colors' => $this->getColors(),
             'decimals' => $this->getDecimals(),
+            'height' => $this->height,
         ];
     }
 }

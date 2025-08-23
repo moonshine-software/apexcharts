@@ -86,7 +86,7 @@ class LineChartMetric extends Metric
         return $this->withoutSortKeys;
     }
 
-    public function setHeight(int $height): static
+    public function height(int|string $height): static
     {
         $this->height = $height;
 
