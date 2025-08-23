@@ -20,6 +20,7 @@
 ## Installation
 ```shell
 composer require moonshine/apexcharts
+php artisan vendor:publish --tag=moonshine-apexcharts-assets
 ```
 
 ## Metric Donut Chart
@@ -131,12 +132,14 @@ The `line()` method allows you to add a value line to the metric. You can add mu
 ```php
 line(
     array|Closure $line,
-    string|array|Closure $color = '#7843E9'
+    string|array|Closure $color = '#7843E9',
+    string|array|Closure $type = 'line',    
 )
 ```
 
 - `$line` - values for charting,
-- `$color` - line color.
+- `$color` - line color,
+- `$type` - chart type (line, area, column)
 
 ```php
 use MoonShine\Apexcharts\Components\LineChartMetric;
@@ -148,14 +151,14 @@ LineChartMetric::make('Orders')
             ->groupBy('date')
             ->pluck('sum','date')
             ->toArray()
-    ])
+    ], type: fn() => 'area')
     ->line([
         'Avg' => Order::query()
             ->selectRaw('AVG(price) as avg, DATE_FORMAT(created_at, "%d.%m.%Y") as date')
             ->groupBy('date')
             ->pluck('avg','date')
             ->toArray()
-    ], '#EC4176') 
+    ], '#EC4176', 'line'); 
 ```
 
 <picture>
@@ -181,7 +184,9 @@ LineChartMetric::make('Orders')
             ->toArray()
     ],[
         'red', 'blue'
-    ])
+    ], [
+        'area', 'line'
+    ]);
 ```
 
 ### Sorting keys
