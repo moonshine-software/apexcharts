@@ -20,6 +20,8 @@ class DonutChartMetric extends Metric
 
     protected int $height = 350;
 
+    protected string $events = '';
+
     protected function assets(): array
     {
         return [
@@ -93,6 +95,24 @@ class DonutChartMetric extends Metric
         return $this;
     }
 
+    public function setEvents(string $events): static
+    {
+        $this->events = $events;
+
+        return $this;
+    }
+
+    public function getEvents(): string
+    {
+        if($this->events === '') {
+            return <<<JS
+            {}
+            JS;
+        }
+
+        return $this->events;
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -104,6 +124,7 @@ class DonutChartMetric extends Metric
             'colors' => $this->getColors(),
             'decimals' => $this->getDecimals(),
             'height' => $this->height,
+            'events' => $this->getEvents(),
         ];
     }
 }
