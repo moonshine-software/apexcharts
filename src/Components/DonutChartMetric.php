@@ -18,7 +18,7 @@ class DonutChartMetric extends Metric
 
     protected int $decimals = 3;
 
-    protected int|string $height = 350;
+    protected int $height = 350;
 
     protected function assets(): array
     {
@@ -88,7 +88,7 @@ class DonutChartMetric extends Metric
 
     public function height(int|string $height): static
     {
-        $this->height = $height;
+        $this->height = (int)$height;
 
         return $this;
     }

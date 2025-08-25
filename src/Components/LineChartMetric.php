@@ -21,7 +21,7 @@ class LineChartMetric extends Metric
 
     protected bool $withoutSortKeys = false;
 
-    protected int|string $height = 300;
+    protected int $height = 300;
 
     protected function assets(): array
     {
@@ -100,7 +100,7 @@ class LineChartMetric extends Metric
 
     public function height(int|string $height): static
     {
-        $this->height = $height;
+        $this->height = (int)$height;
 
         return $this;
     }
