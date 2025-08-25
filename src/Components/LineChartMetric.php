@@ -21,7 +21,7 @@ class LineChartMetric extends Metric
 
     protected bool $withoutSortKeys = false;
 
-    protected int $height = 300;
+    protected int|string $height = 300;
 
     protected function assets(): array
     {

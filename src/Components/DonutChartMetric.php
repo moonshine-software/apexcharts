@@ -18,7 +18,7 @@ class DonutChartMetric extends Metric
 
     protected int $decimals = 3;
 
-    protected int $height = 350;
+    protected int|string $height = 350;
 
     protected function assets(): array
     {
