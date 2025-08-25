@@ -115,6 +115,24 @@ Grid::make([
     <img alt="windows" src="./art/donut_chart_metric_column_span.png">
 </picture>
 
+### Block height
+
+Method `height()` allows you to set the block height in pixels.
+
+```php
+height(
+    int|string $height
+)
+```
+
+Default height is `350`
+
+```php
+DonutChartMetric::make('Subscribers')
+    ->values(['CutCode' => 10000.12, 'Apple' => 9999.32])
+    ->height(600) 
+```
+
 ## Metric Line Chart
 
 The ***LineChartMetric*** metric is designed to display line charts.
@@ -264,3 +282,29 @@ Grid::make([
     <source media="(prefers-color-scheme: light)" srcset="./art/line_chart_metric_column_span.png">
     <img alt="windows" src="./art/line_chart_metric_column_span.png">
 </picture>
+
+### Block height
+
+Method `height()` allows you to set the block height in pixels.
+
+```php
+height(
+    int|string $height
+)
+```
+
+Default height is `300`
+
+```php
+use MoonShine\Apexcharts\Components\LineChartMetric;
+
+LineChartMetric::make('Orders') 
+    ->line([
+        'Avg' => Order::query()
+            ->selectRaw('AVG(price) as avg, DATE_FORMAT(created_at, "%d.%m.%Y") as date')
+            ->groupBy('date')
+            ->pluck('avg','date')
+            ->toArray()
+    ])
+    ->height(600); 
+```

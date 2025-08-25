@@ -3,7 +3,8 @@
     'lines' => [],
     'colors' => [],
     'labels' => [],
-    'types',
+    'types' => [],
+    'height' => 300,
 ])
 <div
     {{ $attributes->merge(['class' => 'chart']) }}
@@ -22,7 +23,7 @@
                 colors: {{ json_encode($colors) }},
                 labels: {{ json_encode($labels) }},
                 chart: {
-                    height: 300,
+                    height: {{ $height }},
                     type: 'line',
                 },
                 yaxis: {

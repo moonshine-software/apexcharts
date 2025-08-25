@@ -6,6 +6,7 @@
     'decimals' => 3,
     'columnSpanValue' => 12,
     'adaptiveColumnSpanValue' => 12,
+    'height' => 350,
 ])
 <x-moonshine::layout.column
     :colSpan="$columnSpanValue"
@@ -19,6 +20,7 @@
             :colors="$colors"
             :decimals="$decimals"
             :title="$label"
+            :height="$height"
         />
     </x-moonshine::layout.box>
 </x-moonshine::layout.column>

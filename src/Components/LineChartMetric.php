@@ -21,6 +21,8 @@ class LineChartMetric extends Metric
 
     protected bool $withoutSortKeys = false;
 
+    protected int $height = 300;
+
     protected function assets(): array
     {
         return [
@@ -96,6 +98,13 @@ class LineChartMetric extends Metric
         return $this->withoutSortKeys;
     }
 
+    public function height(int|string $height): static
+    {
+        $this->height = (int)$height;
+
+        return $this;
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -106,6 +115,7 @@ class LineChartMetric extends Metric
             'lines' => $this->getLines(),
             'colors' => $this->getColors(),
             'types' => $this->getTypes(),
+            'height' => $this->height,
         ];
     }
 }
