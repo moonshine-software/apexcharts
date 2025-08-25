@@ -20,6 +20,7 @@
 ## Installation
 ```shell
 composer require moonshine/apexcharts
+php artisan vendor:publish --tag=moonshine-apexcharts-assets
 ```
 
 ## Metric Donut Chart
@@ -114,6 +115,24 @@ Grid::make([
     <img alt="windows" src="./art/donut_chart_metric_column_span.png">
 </picture>
 
+### Block height
+
+Method `height()` allows you to set the block height in pixels.
+
+```php
+height(
+    int|string $height
+)
+```
+
+Default height is `350`
+
+```php
+DonutChartMetric::make('Subscribers')
+    ->values(['CutCode' => 10000.12, 'Apple' => 9999.32])
+    ->height(600) 
+```
+
 ## Metric Line Chart
 
 The ***LineChartMetric*** metric is designed to display line charts.
@@ -131,12 +150,14 @@ The `line()` method allows you to add a value line to the metric. You can add mu
 ```php
 line(
     array|Closure $line,
-    string|array|Closure $color = '#7843E9'
+    string|array|Closure $color = '#7843E9',
+    string|array|Closure $type = 'line',    
 )
 ```
 
 - `$line` - values for charting,
-- `$color` - line color.
+- `$color` - line color,
+- `$type` - chart type (line, area, column)
 
 ```php
 use MoonShine\Apexcharts\Components\LineChartMetric;
@@ -148,14 +169,14 @@ LineChartMetric::make('Orders')
             ->groupBy('date')
             ->pluck('sum','date')
             ->toArray()
-    ])
+    ], type: fn() => 'area')
     ->line([
         'Avg' => Order::query()
             ->selectRaw('AVG(price) as avg, DATE_FORMAT(created_at, "%d.%m.%Y") as date')
             ->groupBy('date')
             ->pluck('avg','date')
             ->toArray()
-    ], '#EC4176') 
+    ], '#EC4176', 'line'); 
 ```
 
 <picture>
@@ -181,7 +202,9 @@ LineChartMetric::make('Orders')
             ->toArray()
     ],[
         'red', 'blue'
-    ])
+    ], [
+        'area', 'line'
+    ]);
 ```
 
 ### Sorting keys
@@ -259,3 +282,29 @@ Grid::make([
     <source media="(prefers-color-scheme: light)" srcset="./art/line_chart_metric_column_span.png">
     <img alt="windows" src="./art/line_chart_metric_column_span.png">
 </picture>
+
+### Block height
+
+Method `height()` allows you to set the block height in pixels.
+
+```php
+height(
+    int|string $height
+)
+```
+
+Default height is `300`
+
+```php
+use MoonShine\Apexcharts\Components\LineChartMetric;
+
+LineChartMetric::make('Orders') 
+    ->line([
+        'Avg' => Order::query()
+            ->selectRaw('AVG(price) as avg, DATE_FORMAT(created_at, "%d.%m.%Y") as date')
+            ->groupBy('date')
+            ->pluck('avg','date')
+            ->toArray()
+    ])
+    ->height(600); 
+```

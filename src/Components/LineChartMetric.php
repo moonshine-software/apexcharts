@@ -17,7 +17,11 @@ class LineChartMetric extends Metric
 
     protected array $colors = [];
 
+    protected array $types = [];
+
     protected bool $withoutSortKeys = false;
+
+    protected int $height = 300;
 
     protected string $events = '';
 
@@ -34,9 +38,11 @@ class LineChartMetric extends Metric
      */
     public function line(
         array|Closure $line,
-        string|array|Closure $color = '#7843E9'
+        string|array|Closure $color = '#7843E9',
+        string|array|Closure $type = 'line'
     ): static {
-        $this->lines[] = $line instanceof Closure ? $line() : $line;
+        $lines = $line instanceof Closure ? $line() : $line;
+        $this->lines[] = $lines;
 
         $color = $color instanceof Closure ? $color() : $color;
 
@@ -46,12 +52,15 @@ class LineChartMetric extends Metric
             $this->colors = $color;
         }
 
-        return $this;
-    }
+        $type = $type instanceof Closure ? $type() : $type;
 
-    public function getColor(int $index): string
-    {
-        return $this->colors[$index];
+        if (is_string($type)) {
+            $this->types[][] = $type;
+        } else {
+            $this->types[] = $type;
+        }
+
+        return $this;
     }
 
     public function getColors(): array
@@ -74,6 +83,11 @@ class LineChartMetric extends Metric
         return $this->lines;
     }
 
+    public function getTypes(): array
+    {
+        return $this->types;
+    }
+
     public function withoutSortKeys(): static
     {
         $this->withoutSortKeys = true;
@@ -84,6 +98,13 @@ class LineChartMetric extends Metric
     public function isWithoutSortKeys(): bool
     {
         return $this->withoutSortKeys;
+    }
+
+    public function height(int|string $height): static
+    {
+        $this->height = (int)$height;
+
+        return $this;
     }
 
     public function setEvents(string $events): static
@@ -113,6 +134,8 @@ class LineChartMetric extends Metric
             'labels' => $this->getLabels(),
             'lines' => $this->getLines(),
             'colors' => $this->getColors(),
+            'types' => $this->getTypes(),
+            'height' => $this->height,
             'events' => $this->getEvents(),
         ];
     }

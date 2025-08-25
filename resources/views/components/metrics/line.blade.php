@@ -3,6 +3,8 @@
     'lines' => [],
     'colors' => [],
     'labels' => [],
+    'types' => [],
+    'height' => 300,
     'events' => '',
 ])
 <div
@@ -14,6 +16,7 @@
                     {
                         name: '{{ $label }}',
                         data: {{ json_encode(array_values($values)) }},
+                        type: '{{ $types[$loop->parent->index % count($types)][$loop->index % count($types[$loop->parent->index])] }}',
                     },
                     @endforeach
                 @endforeach
@@ -21,7 +24,7 @@
                 colors: {{ json_encode($colors) }},
                 labels: {{ json_encode($labels) }},
                 chart: {
-                    height: 300,
+                    height: {{ $height }},
                     type: 'line',
                     events: {!! $events !!}
                 },

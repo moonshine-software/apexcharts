@@ -4,6 +4,7 @@
     'labels' => [],
     'colors' => [],
     'decimals' => 3,
+    'height' => 350,
 ])
 
 <div
@@ -25,7 +26,7 @@
         },
         labels: {{ json_encode($labels) }},
         chart: {
-            height: 350,
+            height: {{ $height }},
             type: 'donut',
         },
         stroke: {
