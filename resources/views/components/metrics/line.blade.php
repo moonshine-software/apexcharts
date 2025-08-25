@@ -15,7 +15,7 @@
                     {
                         name: '{{ $label }}',
                         data: {{ json_encode(array_values($values)) }},
-                        type: '{{ $types[$loop->parent->index % count($types)][$loop->index % count($types[$loop->parent->index])] }}',
+                        type: '{{ $types[$loop->parent->index % count($types)][$label] ?? "line" }}',
                     },
                     @endforeach
                 @endforeach
