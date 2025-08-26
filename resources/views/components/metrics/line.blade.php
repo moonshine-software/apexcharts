@@ -5,6 +5,7 @@
     'labels' => [],
     'types' => [],
     'height' => 300,
+    'events' => '',
 ])
 <div
     {{ $attributes->merge(['class' => 'chart']) }}
@@ -25,6 +26,7 @@
                 chart: {
                     height: {{ $height }},
                     type: 'line',
+                    events: {!! $events !!}
                 },
                 yaxis: {
                     title: {

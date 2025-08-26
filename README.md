@@ -308,3 +308,31 @@ LineChartMetric::make('Orders')
     ])
     ->height(600); 
 ```
+
+## ApexChart Events
+
+This method `setEvents()` allows you to use: [ApexCharts Events](https://apexcharts.com/docs/options/chart/events/).
+
+It works with both `DonutChartMetric` and `LineChartMetric`. For specific details and nuances, refer to the documentation: [ApexCharts Events Documentation](https://apexcharts.com/docs/options/chart/events/).
+
+```php
+use MoonShine\Apexcharts\Components\LineChartMetric;
+
+LineChartMetric::make('Orders')
+    ->line([
+        'Orders' => Order::query()
+            ->selectRaw('SUM(price) as sum, DATE_FORMAT(created_at, "%d.%m.%Y") as date')
+            ->groupBy('date')
+            ->pluck('sum','date')
+            ->toArray()
+    ], type: 'bar')
+    ->withoutSortKeys()
+    ->setEvents(<<<JS
+    {
+        dataPointSelection: function(event, chartContext, config) {
+            var pointIndex = config.dataPointIndex;
+            location.href = '/admin/page/dashboard/?point=' + (pointIndex + 1);
+        }
+    }
+    JS),
+```

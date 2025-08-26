@@ -5,6 +5,7 @@
     'colors' => [],
     'decimals' => 3,
     'height' => 350,
+    'events' => '',
 ])
 
 <div
@@ -28,6 +29,7 @@
         chart: {
             height: {{ $height }},
             type: 'donut',
+            events: {!! $events !!}
         },
         stroke: {
             colors: ['transparent'],

@@ -23,6 +23,8 @@ class LineChartMetric extends Metric
 
     protected int $height = 300;
 
+    protected string $events = '';
+
     protected function assets(): array
     {
         return [
@@ -105,6 +107,24 @@ class LineChartMetric extends Metric
         return $this;
     }
 
+    public function setEvents(string $events): static
+    {
+        $this->events = $events;
+
+        return $this;
+    }
+
+    public function getEvents(): string
+    {
+        if($this->events === '') {
+            return <<<JS
+            {}
+            JS;
+        }
+
+        return $this->events;
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -116,6 +136,7 @@ class LineChartMetric extends Metric
             'colors' => $this->getColors(),
             'types' => $this->getTypes(),
             'height' => $this->height,
+            'events' => $this->getEvents(),
         ];
     }
 }
