@@ -18,6 +18,7 @@
 | \>= v3.0  |      \>= v1.0.0      |         yes         |
 
 ## Installation
+
 ```shell
 composer require moonshine/apexcharts
 php artisan vendor:publish --tag=moonshine-apexcharts-assets
@@ -209,7 +210,8 @@ LineChartMetric::make('Orders')
 
 ### Sorting keys
 
-By default, the LineChart chart has its keys sorted in ascending order. This feature can be disabled using the `withoutSortKeys()` method.
+By default, the LineChart chart has its keys sorted in ascending order.
+This feature can be disabled using the `withoutSortKeys()` method.
 
 ```php
 LineChartMetric::make('Orders')
@@ -313,7 +315,8 @@ LineChartMetric::make('Orders')
 
 This method `setEvents()` allows you to use: [ApexCharts Events](https://apexcharts.com/docs/options/chart/events/).
 
-It works with both `DonutChartMetric` and `LineChartMetric`. For specific details and nuances, refer to the documentation: [ApexCharts Events Documentation](https://apexcharts.com/docs/options/chart/events/).
+It works with both `DonutChartMetric` and `LineChartMetric`.
+For specific details and nuances, refer to [ApexCharts Events Documentation](https://apexcharts.com/docs/options/chart/events/).
 
 ```php
 use MoonShine\Apexcharts\Components\LineChartMetric;
