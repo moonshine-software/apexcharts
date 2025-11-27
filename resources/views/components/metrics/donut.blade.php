@@ -3,6 +3,7 @@
     'values' => [],
     'labels' => [],
     'colors' => [],
+    'palette' => '',
     'decimals' => 3,
     'height' => 350,
     'events' => '',
@@ -12,7 +13,27 @@
     {{ $attributes->merge(['class' => 'chart']) }}
     x-data="charts({
         series: {{ json_encode($values) }},
+        labels: {{ json_encode($labels) }},
+        chart: {
+            height: {{ $height }},
+            type: 'donut',
+            background: 'transparent',
+            foreColor: '#6a778f',
+            events: {!! $events !!}
+        },
+        @if(!empty($colors))
         colors: {{ json_encode($colors) }},
+        @elseif(!empty($palette))
+        theme: {
+            mode: 'dark',
+            palette: '{{ $palette }}'
+        },
+        @else
+        theme: {
+            mode: 'dark',
+            palette: '{{ config('moonshine_apexcharts.default_palette', 'palette5') }}'
+        },
+        @endif
         tooltip: {
             y: {
                 formatter: function (val) {
@@ -24,12 +45,7 @@
                     },
                 },
             },
-        },
-        labels: {{ json_encode($labels) }},
-        chart: {
-            height: {{ $height }},
-            type: 'donut',
-            events: {!! $events !!}
+            theme: 'dark'
         },
         stroke: {
             colors: ['transparent'],
@@ -52,6 +68,14 @@
                         }
                     }
                 }
+            },
+        },
+        legend: {
+            position: 'bottom',
+            offsetY: 10,
+            itemMargin: {
+                horizontal: 6,
+                vertical: 6,
             },
         },
     })"

@@ -3,6 +3,7 @@
     'labels' => [],
     'lines' => [],
     'colors' => [],
+    'palette' => '',
     'columnSpanValue' => 12,
     'adaptiveColumnSpanValue' => 12,
     'types' => [],
@@ -18,6 +19,7 @@
             :attributes="$attributes"
             :lines="$lines"
             :colors="$colors"
+            :palette="$palette"
             :labels="$labels"
             :title="$label"
             :types="$types"

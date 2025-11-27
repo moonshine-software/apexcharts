@@ -16,6 +16,8 @@ class DonutChartMetric extends Metric
 
     protected array $colors = [];
 
+    protected string $palette = '';
+
     protected int $decimals = 3;
 
     protected int $height = 350;
@@ -88,6 +90,32 @@ class DonutChartMetric extends Metric
         return $this;
     }
 
+    /**
+     * @param int|string|Closure $palette
+     */
+    public function palette(int|string|Closure $palette): static
+    {
+        $paletteValue = $palette instanceof Closure ? $palette() : $palette;
+
+        // Convert number to palette string
+        if (is_numeric($paletteValue)) {
+            $paletteNumber = (int)$paletteValue;
+            if ($paletteNumber < 1 || $paletteNumber > 10) {
+                throw new \InvalidArgumentException("Palette number must be between 1 and 10, got {$paletteNumber}");
+            }
+            $this->palette = 'palette' . $paletteNumber;
+        } else {
+            $this->palette = $paletteValue;
+        }
+
+        return $this;
+    }
+
+    public function getPalette(): string
+    {
+        return $this->palette ?: config('moonshine_apexcharts.default_palette', 'palette5');
+    }
+
     public function height(int|string $height): static
     {
         $this->height = (int)$height;
@@ -122,6 +150,7 @@ class DonutChartMetric extends Metric
             'labels' => $this->getLabels(),
             'values' => $this->getValues(),
             'colors' => $this->getColors(),
+            'palette' => $this->getPalette(),
             'decimals' => $this->getDecimals(),
             'height' => $this->height,
             'events' => $this->getEvents(),

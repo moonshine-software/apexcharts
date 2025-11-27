@@ -8,6 +8,13 @@ use Illuminate\Support\ServiceProvider;
 
 final class ApexchartsServiceProvider extends ServiceProvider
 {
+    public function register(): void
+    {
+        $this->mergeConfigFrom(
+            __DIR__ . '/../../config/moonshine_apexcharts.php', 'moonshine_apexcharts'
+        );
+    }
+
     public function boot(): void
     {
         $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'moonshine-apexcharts');
@@ -15,5 +22,9 @@ final class ApexchartsServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../../public' => public_path('vendor/moonshine-apexcharts'),
         ], ['moonshine-apexcharts-assets', 'laravel-assets']);
+
+        $this->publishes([
+            __DIR__ . '/../../config/moonshine_apexcharts.php' => config_path('moonshine_apexcharts.php'),
+        ], 'moonshine-apexcharts-config');
     }
 }

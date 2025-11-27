@@ -2,6 +2,7 @@
     'title' => '',
     'lines' => [],
     'colors' => [],
+    'palette' => '',
     'labels' => [],
     'types' => [],
     'height' => 300,
@@ -21,7 +22,17 @@
                     @endforeach
                 @endforeach
                 ],
+                @if(!empty($colors))
                 colors: {{ json_encode($colors) }},
+                @elseif(!empty($palette))
+                theme: {
+                    palette: '{{ $palette }}'
+                },
+                @else
+                theme: {
+                    palette: '{{ config('moonshine_apexcharts.default_palette', 'palette5') }}'
+                },
+                @endif
                 labels: {{ json_encode($labels) }},
                 chart: {
                     height: {{ $height }},

@@ -17,6 +17,8 @@ class LineChartMetric extends Metric
 
     protected array $colors = [];
 
+    protected string $palette = '';
+
     protected array $types = [];
 
     protected bool $withoutSortKeys = false;
@@ -34,22 +36,24 @@ class LineChartMetric extends Metric
 
     /**
      * @param  array<string, array<numeric>>|Closure  $line
-     * @param  string|string[]|Closure  $color
+     * @param  string|string[]|Closure|null  $color
      */
     public function line(
         array|Closure $line,
-        string|array|Closure $color = '#7843E9',
+        string|array|Closure $color = null,
         string|array|Closure $type = 'line'
     ): static {
         $lines = $line instanceof Closure ? $line() : $line;
         $this->lines[] = $lines;
 
-        $color = $color instanceof Closure ? $color() : $color;
+        if ($color !== null) {
+            $color = $color instanceof Closure ? $color() : $color;
 
-        if (is_string($color)) {
-            $this->colors[] = $color;
-        } else {
-            $this->colors = $color;
+            if (is_string($color)) {
+                $this->colors[] = $color;
+            } else {
+                $this->colors = $color;
+            }
         }
 
         $type = $type instanceof Closure ? $type() : $type;
@@ -66,6 +70,32 @@ class LineChartMetric extends Metric
     public function getColors(): array
     {
         return $this->colors;
+    }
+
+    /**
+     * @param int|string|Closure $palette
+     */
+    public function palette(int|string|Closure $palette): static
+    {
+        $paletteValue = $palette instanceof Closure ? $palette() : $palette;
+
+        // Convert number to palette string
+        if (is_numeric($paletteValue)) {
+            $paletteNumber = (int)$paletteValue;
+            if ($paletteNumber < 1 || $paletteNumber > 10) {
+                throw new \InvalidArgumentException("Palette number must be between 1 and 10, got {$paletteNumber}");
+            }
+            $this->palette = 'palette' . $paletteNumber;
+        } else {
+            $this->palette = $paletteValue;
+        }
+
+        return $this;
+    }
+
+    public function getPalette(): string
+    {
+        return $this->palette ?: config('moonshine_apexcharts.default_palette', 'palette5');
     }
 
     public function getLabels(): array
@@ -134,6 +164,7 @@ class LineChartMetric extends Metric
             'labels' => $this->getLabels(),
             'lines' => $this->getLines(),
             'colors' => $this->getColors(),
+            'palette' => $this->getPalette(),
             'types' => $this->getTypes(),
             'height' => $this->height,
             'events' => $this->getEvents(),
