@@ -14,7 +14,7 @@
     :colSpan="$columnSpanValue"
     :adaptiveColSpan="$adaptiveColumnSpanValue"
 >
-    <x-moonshine::layout.box class="grow">
+    <x-moonshine::layout.box>
         <x-moonshine-apexcharts::metrics.donut
             :attributes="$attributes"
             :values="$values"
@@ -22,7 +22,7 @@
             :colors="$colors"
             :palette="$palette"
             :decimals="$decimals"
-            :title="$label"
+            :label="$label"
             :height="$height"
             :events="$events"
         />

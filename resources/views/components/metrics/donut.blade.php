@@ -1,5 +1,5 @@
 @props([
-    'title' => '',
+    'label' => '',
     'values' => [],
     'labels' => [],
     'colors' => [],
@@ -57,7 +57,7 @@
                     labels: {
                         show: true,
                         total: {
-                            label: '{{ $title }}',
+                            label: '{{ $label }}',
                             showAlways: false,
                             show: true,
                             formatter: function (w) {

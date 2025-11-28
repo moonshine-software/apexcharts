@@ -14,14 +14,14 @@
     :colSpan="$columnSpanValue"
     :adaptiveColSpan="$adaptiveColumnSpanValue"
 >
-    <x-moonshine::layout.box class="grow">
+    <x-moonshine::layout.box>
         <x-moonshine-apexcharts::metrics.line
             :attributes="$attributes"
             :lines="$lines"
             :colors="$colors"
             :palette="$palette"
             :labels="$labels"
-            :title="$label"
+            :label="$label"
             :types="$types"
             :height="$height"
             :events="$events"

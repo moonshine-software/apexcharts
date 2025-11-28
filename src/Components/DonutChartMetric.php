@@ -5,31 +5,16 @@ declare(strict_types=1);
 namespace MoonShine\Apexcharts\Components;
 
 use Closure;
-use MoonShine\AssetManager\Js;
-use MoonShine\UI\Components\Metrics\Wrapped\Metric;
 
-class DonutChartMetric extends Metric
+class DonutChartMetric extends ApexChartMetric
 {
     protected string $view = 'moonshine-apexcharts::components.metrics.wrapped.donut-chart';
 
     protected array $values = [];
 
-    protected array $colors = [];
-
-    protected string $palette = '';
-
     protected int $decimals = 3;
 
     protected int $height = 350;
-
-    protected string $events = '';
-
-    protected function assets(): array
-    {
-        return [
-            Js::make('vendor/moonshine-apexcharts/apexcharts.js'),
-        ];
-    }
 
     public function getDecimals(): int
     {
@@ -70,75 +55,11 @@ class DonutChartMetric extends Metric
         return array_keys($this->values);
     }
 
-    /**
-     * @return string[]
-     */
-    public function getColors(): array
+    public function withoutWrapper(): static
     {
-        return $this->colors;
-    }
-
-    /**
-     * @param string[]|Closure $colors
-     */
-    public function colors(array|Closure $colors): static
-    {
-        $this->colors = $colors instanceof Closure
-            ? $colors()
-            : $colors;
+        $this->customView('moonshine-apexcharts::components.metrics.donut');
 
         return $this;
-    }
-
-    /**
-     * @param int|string|Closure $palette
-     */
-    public function palette(int|string|Closure $palette): static
-    {
-        $paletteValue = $palette instanceof Closure ? $palette() : $palette;
-
-        // Convert number to palette string
-        if (is_numeric($paletteValue)) {
-            $paletteNumber = (int)$paletteValue;
-            if ($paletteNumber < 1 || $paletteNumber > 10) {
-                throw new \InvalidArgumentException("Palette number must be between 1 and 10, got {$paletteNumber}");
-            }
-            $this->palette = 'palette' . $paletteNumber;
-        } else {
-            $this->palette = $paletteValue;
-        }
-
-        return $this;
-    }
-
-    public function getPalette(): string
-    {
-        return $this->palette ?: config('moonshine_apexcharts.default_palette', 'palette5');
-    }
-
-    public function height(int|string $height): static
-    {
-        $this->height = (int)$height;
-
-        return $this;
-    }
-
-    public function setEvents(string $events): static
-    {
-        $this->events = $events;
-
-        return $this;
-    }
-
-    public function getEvents(): string
-    {
-        if($this->events === '') {
-            return <<<JS
-            {}
-            JS;
-        }
-
-        return $this->events;
     }
 
     /**
@@ -147,13 +68,10 @@ class DonutChartMetric extends Metric
     protected function viewData(): array
     {
         return [
+            ...parent::viewData(),
             'labels' => $this->getLabels(),
             'values' => $this->getValues(),
-            'colors' => $this->getColors(),
-            'palette' => $this->getPalette(),
             'decimals' => $this->getDecimals(),
-            'height' => $this->height,
-            'events' => $this->getEvents(),
         ];
     }
 }

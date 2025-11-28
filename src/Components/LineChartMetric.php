@@ -6,33 +6,18 @@ namespace MoonShine\Apexcharts\Components;
 
 use Closure;
 use Illuminate\Support\Collection;
-use MoonShine\AssetManager\Js;
-use MoonShine\UI\Components\Metrics\Wrapped\Metric;
 
-class LineChartMetric extends Metric
+class LineChartMetric extends ApexChartMetric
 {
     protected string $view = 'moonshine-apexcharts::components.metrics.wrapped.line-chart';
 
     protected array $lines = [];
-
-    protected array $colors = [];
-
-    protected string $palette = '';
 
     protected array $types = [];
 
     protected bool $withoutSortKeys = false;
 
     protected int $height = 300;
-
-    protected string $events = '';
-
-    protected function assets(): array
-    {
-        return [
-            Js::make('vendor/moonshine-apexcharts/apexcharts.js'),
-        ];
-    }
 
     /**
      * @param  array<string, array<numeric>>|Closure  $line
@@ -49,10 +34,10 @@ class LineChartMetric extends Metric
         if ($color !== null) {
             $color = $color instanceof Closure ? $color() : $color;
 
-            if (is_string($color)) {
+            if (is_array($color)) {
+                parent::colors($color);
+            } elseif (is_string($color)) {
                 $this->colors[] = $color;
-            } else {
-                $this->colors = $color;
             }
         }
 
@@ -65,37 +50,6 @@ class LineChartMetric extends Metric
         }
 
         return $this;
-    }
-
-    public function getColors(): array
-    {
-        return $this->colors;
-    }
-
-    /**
-     * @param int|string|Closure $palette
-     */
-    public function palette(int|string|Closure $palette): static
-    {
-        $paletteValue = $palette instanceof Closure ? $palette() : $palette;
-
-        // Convert number to palette string
-        if (is_numeric($paletteValue)) {
-            $paletteNumber = (int)$paletteValue;
-            if ($paletteNumber < 1 || $paletteNumber > 10) {
-                throw new \InvalidArgumentException("Palette number must be between 1 and 10, got {$paletteNumber}");
-            }
-            $this->palette = 'palette' . $paletteNumber;
-        } else {
-            $this->palette = $paletteValue;
-        }
-
-        return $this;
-    }
-
-    public function getPalette(): string
-    {
-        return $this->palette ?: config('moonshine_apexcharts.default_palette', 'palette5');
     }
 
     public function getLabels(): array
@@ -130,29 +84,11 @@ class LineChartMetric extends Metric
         return $this->withoutSortKeys;
     }
 
-    public function height(int|string $height): static
+    public function withoutWrapper(): static
     {
-        $this->height = (int)$height;
+        $this->customView('moonshine-apexcharts::components.metrics.line');
 
         return $this;
-    }
-
-    public function setEvents(string $events): static
-    {
-        $this->events = $events;
-
-        return $this;
-    }
-
-    public function getEvents(): string
-    {
-        if($this->events === '') {
-            return <<<JS
-            {}
-            JS;
-        }
-
-        return $this->events;
     }
 
     /**
@@ -161,13 +97,10 @@ class LineChartMetric extends Metric
     protected function viewData(): array
     {
         return [
+            ...parent::viewData(),
             'labels' => $this->getLabels(),
             'lines' => $this->getLines(),
-            'colors' => $this->getColors(),
-            'palette' => $this->getPalette(),
             'types' => $this->getTypes(),
-            'height' => $this->height,
-            'events' => $this->getEvents(),
         ];
     }
 }

@@ -250,6 +250,27 @@ LineChartMetric::make('Orders')
     ]);
 ```
 
+### Color Palettes
+
+Just like DonutChartMetric, LineChartMetric supports predefined color palettes through the `palette()` method. This helps resolve color contrast issues in dark themes.
+
+```php
+LineChartMetric::make('Sales Trend')
+    ->line([
+        'Revenue' => [12000, 15000, 18000, 14000, 20000],
+        'Orders' => [120, 150, 180, 140, 200]
+    ])
+    ->palette(9) // Uses palette9 (earth tones) suitable for dark themes
+
+// Or use string format
+LineChartMetric::make('Sales Trend')
+    ->line([
+        'Revenue' => [12000, 15000, 18000, 14000, 20000],
+        'Orders' => [120, 150, 180, 140, 200]
+    ])
+    ->palette('palette5') // Uses palette5 (balanced colors)
+```
+
 ### Sorting keys
 
 By default, the LineChart chart has its keys sorted in ascending order.
@@ -284,27 +305,6 @@ columnSpan(
 ```php
 use MoonShine\Apexcharts\Components\LineChartMetric;
 use MoonShine\UI\Components\Layout\Grid;
-
-### Color Palettes
-
-Just like DonutChartMetric, LineChartMetric supports predefined color palettes through the `palette()` method. This helps resolve color contrast issues in dark themes.
-
-```php
-LineChartMetric::make('Sales Trend')
-    ->line([
-        'Revenue' => [12000, 15000, 18000, 14000, 20000],
-        'Orders' => [120, 150, 180, 140, 200]
-    ])
-    ->palette(9) // Uses palette9 (earth tones) suitable for dark themes
-
-// Or use string format
-LineChartMetric::make('Sales Trend')
-    ->line([
-        'Revenue' => [12000, 15000, 18000, 14000, 20000],
-        'Orders' => [120, 150, 180, 140, 200]
-    ])
-    ->palette('palette5') // Uses palette5 (balanced colors)
-```
 
 Grid::make([
     LineChartMetric::make('Articles')

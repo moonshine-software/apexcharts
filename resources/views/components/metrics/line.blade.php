@@ -1,5 +1,5 @@
 @props([
-    'title' => '',
+    'label' => '',
     'lines' => [],
     'colors' => [],
     'palette' => '',
@@ -41,7 +41,7 @@
                 },
                 yaxis: {
                     title: {
-                        text: '{{ $title }}',
+                        text: '{{ $label }}',
                         style: {
                             fontWeight: 400,
                         },
