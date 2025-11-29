@@ -13,11 +13,11 @@
     x-data="charts({
                 series: [
                 @foreach($lines as $line)
-                    @foreach($line as $label => $values)
+                    @foreach($line as $lineLabel => $values)
                     {
-                        name: '{{ $label }}',
+                        name: '{{ $lineLabel }}',
                         data: {{ json_encode(array_values($values)) }},
-                        type: '{{ $types[$loop->parent->index][$label] ?? $types[$loop->parent->index][0] ?? "line" }}',
+                        type: '{{ $types[$loop->parent->index][$loop->index] ?? $types[$loop->parent->index][0] ?? "line" }}',
                     },
                     @endforeach
                 @endforeach
