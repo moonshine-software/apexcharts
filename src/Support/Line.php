@@ -12,7 +12,7 @@ class Line
 
     private string $name;
     private array $data;
-    private string $type = 'line';
+    private ChartType $type = ChartType::LINE;
     private ?string $color = null;
     private array $customConfig = [];
 
@@ -34,7 +34,7 @@ class Line
         return $this;
     }
 
-    public function type(string $type): self
+    public function type(ChartType $type): self
     {
         $this->type = $type;
         return $this;
@@ -48,28 +48,23 @@ class Line
 
     public function line(): self
     {
-        $this->type = 'line';
+        $this->type = ChartType::LINE;
         return $this;
     }
 
     public function area(): self
     {
-        $this->type = 'area';
+        $this->type = ChartType::AREA;
         return $this;
     }
 
     public function column(): self
     {
-        $this->type = 'column';
+        $this->type = ChartType::COLUMN;
         return $this;
     }
 
-    public function scatter(): self
-    {
-        $this->type = 'scatter';
-        return $this;
-    }
-
+    
     public function customConfig(array $config): self
     {
         $this->customConfig = array_merge($this->customConfig, $config);
@@ -86,7 +81,7 @@ class Line
         return $this->data;
     }
 
-    public function getType(): string
+    public function getType(): ChartType
     {
         return $this->type;
     }
@@ -106,7 +101,7 @@ class Line
         return [
             'name' => $this->name,
             'data' => $this->data,
-            'type' => $this->type,
+            'type' => $this->type->value,
             'color' => $this->color,
             'customConfig' => $this->customConfig,
         ];

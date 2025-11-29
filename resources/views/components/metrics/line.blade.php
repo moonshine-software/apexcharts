@@ -7,6 +7,11 @@
     'height' => 300,
     'events' => '',
 ])
+@php
+    /**
+     * @var MoonShine\Apexcharts\Support\Line $line
+     */
+@endphp
 <div
     {{ $attributes->merge(['class' => 'chart']) }}
     x-data="charts({
@@ -16,7 +21,7 @@
                         // $line is now a Line object
                         $lineName = $line->getName();
                         $lineData = array_values($line->getData());
-                        $lineType = $line->getType();
+                        $lineType = $line->getType()->value;
                         $lineColor = $line->getColor();
                     @endphp
                     {

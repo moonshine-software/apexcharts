@@ -7,6 +7,7 @@ namespace MoonShine\Apexcharts\Components;
 use Closure;
 use Illuminate\Support\Collection;
 use MoonShine\Apexcharts\Support\Line;
+use MoonShine\Apexcharts\Support\ChartType;
 
 class LineChartMetric extends ApexChartMetric
 {
@@ -27,18 +28,29 @@ class LineChartMetric extends ApexChartMetric
     public function line(
         array|Closure $line,
         string|array|Closure $color = null,
-        string|array|Closure $type = 'line'
+        string|array|Closure|ChartType $type = ChartType::LINE
     ): static {
         $linesData = $line instanceof Closure ? $line() : $line;
         $typesData = $type instanceof Closure ? $type() : $type;
         $colorsData = $color instanceof Closure ? $color() : $color;
+
+        // Convert single ChartType to array for compatibility
+        if ($typesData instanceof ChartType) {
+            $typesData = [$typesData];
+        }
 
         $typeArray = is_array($typesData) ? array_values($typesData) : [$typesData];
         $colorArray = is_array($colorsData) ? array_values($colorsData) : ($colorsData ? [$colorsData] : []);
 
         $lineIndex = 0;
         foreach ($linesData as $name => $data) {
-            $lineType = $typeArray[$lineIndex] ?? $typeArray[0] ?? 'line';
+            // Convert string types to ChartType enum using built-in from() method
+            $lineType = $typeArray[$lineIndex] ?? $typeArray[0] ?? ChartType::LINE;
+
+            if (is_string($lineType)) {
+                $lineType = ChartType::from($lineType);
+            }
+
             $lineColor = $colorArray[$lineIndex] ?? null;
 
             $lineObj = Line::make($name, $data)->type($lineType);
