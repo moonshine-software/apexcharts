@@ -15,64 +15,87 @@
 
 | MoonShine | Moonshine ApexCharts | Currently supported |
 |:---------:|:--------------------:|:-------------------:|
-| \>= v3.0  |      \>= v1.0.0      |         yes         |
+| \>= v3.0  |      \>= v1.0.0      |         no          |
+| \>= v3.0  |      \>= v2.0.0      |         yes         |
 
 ## Installation
 
 ```shell
 composer require moonshine/apexcharts
-php artisan vendor:publish --tag=moonshine-apexcharts-assets
 ```
 
-## Metric Donut Chart
+```shell
+php artisan vendor:publish --tag=moonshine-apexcharts-assets --force
+```
 
-The ***DonutChartMetric*** metric is designed for creating Donut charts.
+Optional: to customize default settings
 
-### Make
+```shell
+php artisan vendor:publish --tag=moonshine-apexcharts-config
+```
 
-You can create ***DonutChartMetric*** using the static `make()` method.
+## Available Charts
+
+- **Line Chart** - Linear, area, and column charts for time-series data with full typing support,
+- **Donut Chart** - Circular charts for categorical data.
+
+## Usage
+
+### Line Chart
+
+#### Typed Approach (Recommended)
 
 ```php
-make(Closure|string $label)
+use MoonShine\Apexcharts\Components\LineChartMetric;
+use MoonShine\Apexcharts\Support\Line;
+use MoonShine\Apexcharts\Support\ChartType;
+
+LineChartMetric::make('Sales')
+    ->addLine(Line::make('Revenue', $data)->area())
+    ->addLine(Line::make('Profit', $data)->line())
+    ->addLine(Line::make('Costs', $data)->column());
 ```
 
-Method `values()` allows you to specify the relevance for a metric.
+#### Legacy Array Approach
 
 ```php
-values(array|Closure $values)
+use MoonShine\Apexcharts\Components\LineChartMetric;
+use MoonShine\Apexcharts\Support\ChartType;
+
+LineChartMetric::make('Sales')
+    ->line([
+        'Revenue' => $data,
+        'Profit' => $data,
+        'Costs' => $data,
+    ], [ChartType::AREA, ChartType::LINE, ChartType::COLUMN]);
 ```
+
+### Donut Chart
 
 ```php
 use MoonShine\Apexcharts\Components\DonutChartMetric;
 
-DonutChartMetric::make('Subscribers') 
-    ->values(['CutCode' => 10000, 'Apple' => 9999]) 
-```
-
-<picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./art/donut_chart_metric_dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="./art/donut_chart_metric.png">
-    <img alt="windows" src="./art/donut_chart_metric.png">
-</picture>
-
-### Colors
-
-The `colors()` method allows you to specify colors for the metric.
-
-```php
-colors(array|Closure $values)
-```
-
-```php
 DonutChartMetric::make('Subscribers')
-    ->values(['CutCode' => 10000, 'Apple' => 9999])
-    ->colors(['#ffcc00', '#00bb00'])
+    ->values([
+        'CutCode' => 10000,
+        'Apple' => 9999,
+    ]);
 ```
 
-### Color Palettes
+## Methods
 
-The `palette()` method allows you to use predefined ApexCharts color palettes.
-This is especially useful for dark themes where default colors may appear too bright.
+### Common
+
+```php
+->colors(array)         // Custom colors
+->columnSpan(int)       // Grid columns
+->height(int)           // Chart height
+->palette(int|string)   // Color palette (1-10 or palette name)
+->setEvents(string)     // Custom JavaScript events
+->withoutWrapper()      // Without box wrapper
+```
+
+#### Color Palettes
 
 Available palettes:
 - `palette1`: Vibrant colors (#008FFB, #00E396, #FEB019, #FF4560, #775DD0)
@@ -86,319 +109,32 @@ Available palettes:
 - `palette9`: Earth tones (#5C4742, #A5978B, #8D5B4C, #5A2A27, #C4BBAF)
 - `palette10`: Blue/purple theme (#A300D6, #7D02EB, #5653FE, #2983FF, #00B1F2)
 
-```php
-DonutChartMetric::make('Sales by Category')
-    ->values(['Electronics' => 15000, 'Clothing' => 8500, 'Books' => 3200])
-    ->palette(9)
-
-// Or use string format
-DonutChartMetric::make('Sales by Category')
-    ->values(['Electronics' => 15000, 'Clothing' => 8500, 'Books' => 3200])
-    ->palette('palette5')
-```
-
-**Priority**: Custom colors (via `colors()`) have priority over palettes. If no colors or palette are specified, the default palette from configuration will be used.
-
-**Configuration**: You can set the default palette by publishing the config:
-
-```bash
-php artisan vendor:publish --tag=moonshine-apexcharts-config
-```
-
-Then modify `config/apexcharts.php`:
+### LineChartMetric
 
 ```php
-'default_palette' => 'palette5', // Default palette for all charts
+->addLine(Line $line)           // Add a Line object
+->addLines(array $lines)        // Add multiple Line objects
+->line(array $data, $colors, $types)  // Legacy array approach
+->withoutSortKeys()             // Preserve key order
+->withoutWrapper()              // Without box wrapper
 ```
 
-### Decimal places
-
-The `decimals()` method allows you to specify the maximum number of decimal places for the total value.
-
-> [!NOTE]
-> By default, up to three decimal places are displayed.
+#### Line Methods
 
 ```php
-DonutChartMetric::make('Subscribers')
-    ->values(['CutCode' => 10000.12, 'Apple' => 9999.32])
-    ->decimals(0) 
+Line::make('Name', $data)
+    ->line()                     // Line chart type
+    ->area()                     // Area chart type
+    ->column()                   // Column chart type
+    ->color('#hex')              // Custom color
+    ->name('New Name')           // Change line name
+    ->data([...])                // Change line data
 ```
 
-### Block width
-
-Method `columnSpan()` allows you to set the block width in the *Grid* grid.
+### DonutChartMetric
 
 ```php
-columnSpan(
-    int $columnSpan,
-    int $adaptiveColumnSpan = 12
-)
-```
-
-- `$columnSpan` - relevant for desktop,
-- `$adaptiveColumnSpan` - relevant for mobile version.
-
-```php
-use MoonShine\Apexcharts\Components\DonutChartMetric;
-use MoonShine\UI\Components\Layout\Grid;
-
-Grid::make([ 
-    DonutChartMetric::make('Subscribers')
-        ->values(['CutCode' => 10000, 'Apple' => 9999])
-        ->columnSpan(6), 
-    DonutChartMetric::make('Tasks')
-        ->values(['New' => 234, 'Done' => 421])
-        ->columnSpan(6) 
-]) 
-```
-
-<picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./art/donut_chart_metric_column_span_dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="./art/donut_chart_metric_column_span.png">
-    <img alt="windows" src="./art/donut_chart_metric_column_span.png">
-</picture>
-
-### Block height
-
-Method `height()` allows you to set the block height in pixels.
-
-```php
-height(
-    int|string $height
-)
-```
-
-Default height is `350`
-
-```php
-DonutChartMetric::make('Subscribers')
-    ->values(['CutCode' => 10000.12, 'Apple' => 9999.32])
-    ->height(600) 
-```
-
-## Metric Line Chart
-
-The ***LineChartMetric*** metric is designed to display line charts.
-
-### Make
-
-You can create a ***LineChartMetric** using the static `make()` method.
-
-```php
-make(Closure|string $label)
-```
-
-The `line()` method allows you to add a value line to the metric. You can add multiple lines to *ValueMetric*.
-
-```php
-line(
-    array|Closure $line,
-    string|array|Closure $color = '#7843E9',
-    string|array|Closure $type = 'line',    
-)
-```
-
-- `$line` - values for charting,
-- `$color` - line color,
-- `$type` - chart type (line, area, column)
-
-```php
-use MoonShine\Apexcharts\Components\LineChartMetric;
-
-LineChartMetric::make('Orders') 
-    ->line([
-        'Profit' => Order::query()
-            ->selectRaw('SUM(price) as sum, DATE_FORMAT(created_at, "%d.%m.%Y") as date')
-            ->groupBy('date')
-            ->pluck('sum','date')
-            ->toArray()
-    ], type: fn() => 'area')
-    ->line([
-        'Avg' => Order::query()
-            ->selectRaw('AVG(price) as avg, DATE_FORMAT(created_at, "%d.%m.%Y") as date')
-            ->groupBy('date')
-            ->pluck('avg','date')
-            ->toArray()
-    ], '#EC4176', 'line'); 
-```
-
-<picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./art/line_chart_metric_dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="./art/line_chart_metric.png">
-    <img alt="windows" src="./art/line_chart_metric.png">
-</picture>
-
-You can define multiple lines through one `line()` method.
-
-```php
-LineChartMetric::make('Orders') 
-    ->line([
-        'Profit' => Order::query()
-            ->selectRaw('SUM(price) as sum, DATE_FORMAT(created_at, "%d.%m.%Y") as date')
-            ->groupBy('date')
-            ->pluck('sum','date')
-            ->toArray(),
-        'Avg' => Order::query()
-            ->selectRaw('AVG(price) as avg, DATE_FORMAT(created_at, "%d.%m.%Y") as date')
-            ->groupBy('date')
-            ->pluck('avg','date')
-            ->toArray()
-    ],[
-        'red', 'blue'
-    ], [
-        'area', 'line'
-    ]);
-```
-
-### Color Palettes
-
-Just like DonutChartMetric, LineChartMetric supports predefined color palettes through the `palette()` method. This helps resolve color contrast issues in dark themes.
-
-```php
-LineChartMetric::make('Sales Trend')
-    ->line([
-        'Revenue' => [12000, 15000, 18000, 14000, 20000],
-        'Orders' => [120, 150, 180, 140, 200]
-    ])
-    ->palette(9) // Uses palette9 (earth tones) suitable for dark themes
-
-// Or use string format
-LineChartMetric::make('Sales Trend')
-    ->line([
-        'Revenue' => [12000, 15000, 18000, 14000, 20000],
-        'Orders' => [120, 150, 180, 140, 200]
-    ])
-    ->palette('palette5') // Uses palette5 (balanced colors)
-```
-
-### Sorting keys
-
-By default, the LineChart chart has its keys sorted in ascending order.
-This feature can be disabled using the `withoutSortKeys()` method.
-
-```php
-LineChartMetric::make('Orders')
-    ->line([
-        'Profit' => Order::query()
-            ->selectRaw('SUM(price) as sum, DATE_FORMAT(created_at, "%d.%m.%Y") as date')
-            ->groupBy('date')
-            ->pluck('sum','date')
-            ->toArray()
-    ])
-    ->withoutSortKeys(), 
-```
-
-### Block width
-
-Method `columnSpan()` allows you to set the block width in the *Grid* grid.
-
-```php
-columnSpan(
-    int $columnSpan,
-    int $adaptiveColumnSpan = 12
-), 
-```
-
-- `$columnSpan` - relevant for desktop,
-- `$adaptiveColumnSpan` - relevant for mobile version.
-
-```php
-use MoonShine\Apexcharts\Components\LineChartMetric;
-use MoonShine\UI\Components\Layout\Grid;
-
-Grid::make([
-    LineChartMetric::make('Articles')
-        ->line([
-            'Count' => [
-                now()->subDays()->format('Y-m-d') =>
-                    Article::whereDate(
-                        'created_at',
-                        now()->subDays()->format('Y-m-d')
-                    )->count(),
-                now()->format('Y-m-d') =>
-                    Article::whereDate(
-                        'created_at',
-                        now()->subDays()->format('Y-m-d')
-                    )->count()
-            ]
-        ])
-        ->columnSpan(6), 
-    LineChartMetric::make('Comments')
-        ->line([
-            'Count' => [
-                now()->subDays()->format('Y-m-d') =>
-                    Comment::whereDate(
-                        'created_at',
-                        now()->subDays()->format('Y-m-d')
-                    )->count(),
-                now()->format('Y-m-d') =>
-                    Comment::whereDate(
-                        'created_at',
-                        now()->subDays()->format('Y-m-d')
-                    )->count()
-            ]
-        ])
-        ->columnSpan(6) 
-])
-```
-
-<picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./art/line_chart_metric_column_span_dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="./art/line_chart_metric_column_span.png">
-    <img alt="windows" src="./art/line_chart_metric_column_span.png">
-</picture>
-
-### Block height
-
-Method `height()` allows you to set the block height in pixels.
-
-```php
-height(
-    int|string $height
-)
-```
-
-Default height is `300`
-
-```php
-use MoonShine\Apexcharts\Components\LineChartMetric;
-
-LineChartMetric::make('Orders') 
-    ->line([
-        'Avg' => Order::query()
-            ->selectRaw('AVG(price) as avg, DATE_FORMAT(created_at, "%d.%m.%Y") as date')
-            ->groupBy('date')
-            ->pluck('avg','date')
-            ->toArray()
-    ])
-    ->height(600); 
-```
-
-## ApexChart Events
-
-This method `setEvents()` allows you to use: [ApexCharts Events](https://apexcharts.com/docs/options/chart/events/).
-
-It works with both `DonutChartMetric` and `LineChartMetric`.
-For specific details and nuances, refer to [ApexCharts Events Documentation](https://apexcharts.com/docs/options/chart/events/).
-
-```php
-use MoonShine\Apexcharts\Components\LineChartMetric;
-
-LineChartMetric::make('Orders')
-    ->line([
-        'Orders' => Order::query()
-            ->selectRaw('SUM(price) as sum, DATE_FORMAT(created_at, "%d.%m.%Y") as date')
-            ->groupBy('date')
-            ->pluck('sum','date')
-            ->toArray()
-    ], type: 'bar')
-    ->withoutSortKeys()
-    ->setEvents(<<<JS
-    {
-        dataPointSelection: function(event, chartContext, config) {
-            var pointIndex = config.dataPointIndex;
-            location.href = '/admin/page/dashboard/?point=' + (pointIndex + 1);
-        }
-    }
-    JS),
+->values(array)                  // Set chart values
+->decimals(int)                  // Decimal places (0-100)
+->withoutWrapper()               // Without box wrapper
 ```
