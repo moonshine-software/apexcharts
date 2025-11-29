@@ -17,32 +17,21 @@
     x-data="charts({
                 series: [
                 @foreach($lines as $line)
-                    @php
-                        // $line is now a Line object
-                        $lineName = $line->getName();
-                        $lineData = array_values($line->getData());
-                        $lineType = $line->getType()->value;
-                        $lineColor = $line->getColor();
-                    @endphp
                     {
-                        name: '{{ $lineName }}',
-                        data: {{ json_encode($lineData) }},
-                        type: '{{ $lineType }}',
-                        @if($lineColor)
-                        color: '{{ $lineColor }}',
+                        name: '{{ $line->getName() }}',
+                        data: {{ json_encode(array_values($line->getData())) }},
+                        type: '{{ $line->getType()->value }}',
+                        @if($line->getColor())
+                        color: '{{ $line->getColor() }}',
                         @endif
                     },
                 @endforeach
                 ],
                 @if(!empty($colors))
                 colors: {{ json_encode($colors) }},
-                @elseif(!empty($palette))
-                theme: {
-                    palette: '{{ $palette }}'
-                },
                 @else
                 theme: {
-                    palette: '{{ config('moonshine_apexcharts.default_palette', 'palette5') }}'
+                    palette: '{{ $palette }}'
                 },
                 @endif
                 labels: {{ json_encode($labels) }},

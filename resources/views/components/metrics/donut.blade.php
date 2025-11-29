@@ -23,15 +23,10 @@
         },
         @if(!empty($colors))
         colors: {{ json_encode($colors) }},
-        @elseif(!empty($palette))
-        theme: {
-            mode: 'dark',
-            palette: '{{ $palette }}'
-        },
         @else
         theme: {
             mode: 'dark',
-            palette: '{{ config('moonshine_apexcharts.default_palette', 'palette5') }}'
+            palette: '{{ $palette }}'
         },
         @endif
         tooltip: {
