@@ -6,7 +6,6 @@
     'palette' => '',
     'columnSpanValue' => 12,
     'adaptiveColumnSpanValue' => 12,
-    'types' => [],
     'height' => 300,
     'events' => '',
 ])
@@ -22,7 +21,6 @@
             :palette="$palette"
             :labels="$labels"
             :label="$label"
-            :types="$types"
             :height="$height"
             :events="$events"
         />

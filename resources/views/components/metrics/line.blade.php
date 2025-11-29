@@ -4,7 +4,6 @@
     'colors' => [],
     'palette' => '',
     'labels' => [],
-    'types' => [],
     'height' => 300,
     'events' => '',
 ])
@@ -13,13 +12,21 @@
     x-data="charts({
                 series: [
                 @foreach($lines as $line)
-                    @foreach($line as $lineLabel => $values)
+                    @php
+                        // $line is now a Line object
+                        $lineName = $line->getName();
+                        $lineData = array_values($line->getData());
+                        $lineType = $line->getType();
+                        $lineColor = $line->getColor();
+                    @endphp
                     {
-                        name: '{{ $lineLabel }}',
-                        data: {{ json_encode(array_values($values)) }},
-                        type: '{{ $types[$loop->parent->index][$loop->index] ?? $types[$loop->parent->index][0] ?? "line" }}',
+                        name: '{{ $lineName }}',
+                        data: {{ json_encode($lineData) }},
+                        type: '{{ $lineType }}',
+                        @if($lineColor)
+                        color: '{{ $lineColor }}',
+                        @endif
                     },
-                    @endforeach
                 @endforeach
                 ],
                 @if(!empty($colors))

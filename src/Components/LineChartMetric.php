@@ -6,57 +6,78 @@ namespace MoonShine\Apexcharts\Components;
 
 use Closure;
 use Illuminate\Support\Collection;
+use MoonShine\Apexcharts\Support\Line;
 
 class LineChartMetric extends ApexChartMetric
 {
     protected string $view = 'moonshine-apexcharts::components.metrics.wrapped.line-chart';
 
-    protected array $lines = [];
-
-    protected array $types = [];
+    /** @var array<int, Line> */
+  protected array $lines = [];
 
     protected bool $withoutSortKeys = false;
 
     protected int $height = 300;
 
     /**
-     * @param  array<string, array<numeric>>|Closure  $line
-     * @param  string|string[]|Closure|null  $color
+     * @param array<string, array<numeric>>|Closure $line
+     * @param string|string[]|Closure|null $color
+     * @param string|string[]|Closure $type
      */
     public function line(
         array|Closure $line,
         string|array|Closure $color = null,
         string|array|Closure $type = 'line'
     ): static {
-        $lines = $line instanceof Closure ? $line() : $line;
-        $this->lines[] = $lines;
+        $linesData = $line instanceof Closure ? $line() : $line;
+        $typesData = $type instanceof Closure ? $type() : $type;
+        $colorsData = $color instanceof Closure ? $color() : $color;
 
-        if ($color !== null) {
-            $color = $color instanceof Closure ? $color() : $color;
+        $typeArray = is_array($typesData) ? array_values($typesData) : [$typesData];
+        $colorArray = is_array($colorsData) ? array_values($colorsData) : ($colorsData ? [$colorsData] : []);
 
-            if (is_array($color)) {
-                parent::colors($color);
-            } elseif (is_string($color)) {
-                $this->colors[] = $color;
+        $lineIndex = 0;
+        foreach ($linesData as $name => $data) {
+            $lineType = $typeArray[$lineIndex] ?? $typeArray[0] ?? 'line';
+            $lineColor = $colorArray[$lineIndex] ?? null;
+
+            $lineObj = Line::make($name, $data)->type($lineType);
+            if ($lineColor) {
+                $lineObj->color($lineColor);
             }
+            $this->lines[] = $lineObj;
+
+            $lineIndex++;
         }
 
-        $type = $type instanceof Closure ? $type() : $type;
+        return $this;
+    }
 
-        if (is_string($type)) {
-            $this->types[][] = $type;
-        } else {
-            $this->types[] = $type;
+    /**
+     * @param Line $line
+     */
+    public function addLine(Line $line): static
+    {
+        $this->lines[] = $line;
+        return $this;
+    }
+
+    /**
+     * @param array<int, Line> $lines
+     */
+    public function addLines(array $lines): static
+    {
+        foreach ($lines as $line) {
+            $this->addLine($line);
         }
-
         return $this;
     }
 
     public function getLabels(): array
     {
         return collect($this->getLines())
+            ->mapWithKeys(static fn (Line $line): mixed => [$line->getName() => $line->getData()])
             ->collapse()
-            ->mapWithKeys(static fn ($item): mixed => $item)
             ->when(! $this->isWithoutSortKeys(), static fn ($items): Collection => $items->sortKeys())
             ->keys()
             ->toArray();
@@ -65,11 +86,6 @@ class LineChartMetric extends ApexChartMetric
     public function getLines(): array
     {
         return $this->lines;
-    }
-
-    public function getTypes(): array
-    {
-        return $this->types;
     }
 
     public function withoutSortKeys(): static
@@ -100,7 +116,6 @@ class LineChartMetric extends ApexChartMetric
             ...parent::viewData(),
             'labels' => $this->getLabels(),
             'lines' => $this->getLines(),
-            'types' => $this->getTypes(),
         ];
     }
 }
