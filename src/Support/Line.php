@@ -14,7 +14,6 @@ class Line
     private array $data;
     private ChartType $type = ChartType::LINE;
     private ?string $color = null;
-    private array $customConfig = [];
 
     public function __construct(string $name, array $data)
     {
@@ -64,13 +63,6 @@ class Line
         return $this;
     }
 
-    
-    public function customConfig(array $config): self
-    {
-        $this->customConfig = array_merge($this->customConfig, $config);
-        return $this;
-    }
-
     public function getName(): string
     {
         return $this->name;
@@ -91,11 +83,6 @@ class Line
         return $this->color;
     }
 
-    public function getCustomConfig(): array
-    {
-        return $this->customConfig;
-    }
-
     public function toArray(): array
     {
         return [
@@ -103,7 +90,6 @@ class Line
             'data' => $this->data,
             'type' => $this->type->value,
             'color' => $this->color,
-            'customConfig' => $this->customConfig,
         ];
     }
 }
