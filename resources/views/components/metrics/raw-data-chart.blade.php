@@ -19,7 +19,6 @@
     {{ $attributes->merge(['class' => 'chart']) }}
     x-data="rawDataChart({
         config: @js($config),
-        events: {!! $events !!},
-        element: $el
+        events: {!! $events !!}
     })"
 ></div>

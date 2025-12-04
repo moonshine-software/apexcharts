@@ -4,7 +4,7 @@
     'config' => [],
     'columnSpanValue' => 12,
     'adaptiveColumnSpanValue' => 12,
-    'events' => '',
+    'events' => '{}',
 ])
 <x-moonshine::layout.column
     :colSpan="$columnSpanValue"

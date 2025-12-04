@@ -8,7 +8,7 @@ use Closure;
 use MoonShine\AssetManager\Js;
 use MoonShine\UI\Components\Metrics\Wrapped\Metric;
 
-class ApexChartFromRawData extends Metric
+class RawChartMetric extends Metric
 {
     protected string $view = 'moonshine-apexcharts::components.metrics.wrapped.raw-data-chart';
 

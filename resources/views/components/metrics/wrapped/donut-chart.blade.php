@@ -1,5 +1,6 @@
 @props([
     'label' => '',
+    'icon' => '',
     'labels' => [],
     'values' => [],
     'colors' => [],
@@ -17,12 +18,13 @@
     <x-moonshine::layout.box>
         <x-moonshine-apexcharts::metrics.donut
             :attributes="$attributes"
+            :label="$label"
+            :icon="$icon"
             :values="$values"
             :labels="$labels"
             :colors="$colors"
             :palette="$palette"
             :decimals="$decimals"
-            :label="$label"
             :height="$height"
             :events="$events"
         />

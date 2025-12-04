@@ -18,7 +18,7 @@ class LineChartMetric extends ApexChartMetric
 
     protected bool $withoutSortKeys = false;
 
-    protected int $height = 300;
+    protected int $height = 333;
 
     /**
      * @param array<string, array<numeric>>|Closure $line

@@ -1,5 +1,6 @@
 @props([
     'label' => '',
+    'icon' => '',
     'values' => [],
     'labels' => [],
     'colors' => [],
@@ -8,6 +9,10 @@
     'height' => 350,
     'events' => '',
 ])
+
+@if($icon)
+<div>{!! $icon !!}</div>
+@endif
 
 <div
     {{ $attributes->merge(['class' => 'chart']) }}
@@ -56,14 +61,14 @@
                             showAlways: false,
                             show: true,
                             formatter: function (w) {
-                            return Number(w.globals.seriesTotals.reduce((a, b) => {
-                              return a + b
-                            }, 0).toFixed({{ $decimals }}))
-                          }
+                                return Number(w.globals.seriesTotals.reduce((a, b) => {
+                                    return a + b
+                                }, 0).toFixed({{ $decimals }}))
+                            }
                         }
                     }
                 }
-            },
+            }
         },
         legend: {
             position: 'bottom',
