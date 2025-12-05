@@ -14,8 +14,6 @@ abstract class ApexChartMetric extends Metric
 
     protected int $height;
 
-    protected string $events = '';
-
     protected function assets(): array
     {
         return [
@@ -43,30 +41,11 @@ abstract class ApexChartMetric extends Metric
         return $this->colors;
     }
 
-    
     public function height(int|string $height): static
     {
         $this->height = (int)$height;
 
         return $this;
-    }
-
-    public function setEvents(string $events): static
-    {
-        $this->events = $events;
-
-        return $this;
-    }
-
-    public function getEvents(): string
-    {
-        if($this->events === '') {
-            return <<<JS
-            {}
-            JS;
-        }
-
-        return $this->events;
     }
 
     /**
@@ -77,7 +56,6 @@ abstract class ApexChartMetric extends Metric
         return [
             'colors' => $this->getColors(),
             'height' => $this->height,
-            'events' => $this->getEvents(),
         ];
     }
 }

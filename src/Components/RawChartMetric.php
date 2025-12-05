@@ -6,43 +6,16 @@ namespace MoonShine\Apexcharts\Components;
 
 use Closure;
 use MoonShine\Apexcharts\Traits\WithPalette;
-use MoonShine\AssetManager\Js;
-use MoonShine\UI\Components\Metrics\Wrapped\Metric;
+use MoonShine\Apexcharts\Traits\WithEvents;
 
-class RawChartMetric extends Metric
+class RawChartMetric extends ApexChartMetric
 {
     use WithPalette;
+    use WithEvents;
 
     protected string $view = 'moonshine-apexcharts::components.metrics.wrapped.raw-data-chart';
 
     protected array $config = [];
-
-    protected string $events = '';
-
-    protected function assets(): array
-    {
-        return [
-            Js::make('vendor/moonshine-apexcharts/apexcharts.js'),
-        ];
-    }
-
-    public function setEvents(string $events): static
-    {
-        $this->events = $events;
-
-        return $this;
-    }
-
-    public function getEvents(): string
-    {
-        if ($this->events === '') {
-            return <<<JS
-            {}
-            JS;
-        }
-
-        return $this->events;
-    }
 
     /**
      * @param array|Closure $config
