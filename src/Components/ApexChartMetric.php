@@ -12,8 +12,6 @@ abstract class ApexChartMetric extends Metric
 {
     protected array $colors = [];
 
-    protected string $palette = '';
-
     protected int $height;
 
     protected string $events = '';
@@ -45,31 +43,7 @@ abstract class ApexChartMetric extends Metric
         return $this->colors;
     }
 
-    /**
-     * @param int|string|Closure $palette
-     */
-    public function palette(int|string|Closure $palette): static
-    {
-        $paletteValue = $palette instanceof Closure ? $palette() : $palette;
-
-        if (is_numeric($paletteValue)) {
-            $paletteNumber = (int)$paletteValue;
-            if ($paletteNumber < 1 || $paletteNumber > 10) {
-                throw new \InvalidArgumentException("Palette number must be between 1 and 10, got {$paletteNumber}");
-            }
-            $this->palette = 'palette' . $paletteNumber;
-        } else {
-            $this->palette = $paletteValue;
-        }
-
-        return $this;
-    }
-
-    public function getPalette(): string
-    {
-        return $this->palette ?: config('moonshine_apexcharts.default_palette', 'palette6');
-    }
-
+    
     public function height(int|string $height): static
     {
         $this->height = (int)$height;
@@ -102,7 +76,6 @@ abstract class ApexChartMetric extends Metric
     {
         return [
             'colors' => $this->getColors(),
-            'palette' => $this->getPalette(),
             'height' => $this->height,
             'events' => $this->getEvents(),
         ];

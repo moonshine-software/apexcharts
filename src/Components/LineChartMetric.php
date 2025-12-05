@@ -8,9 +8,12 @@ use Closure;
 use Illuminate\Support\Collection;
 use MoonShine\Apexcharts\Support\Line;
 use MoonShine\Apexcharts\Support\ChartType;
+use MoonShine\Apexcharts\Traits\WithPalette;
 
 class LineChartMetric extends ApexChartMetric
 {
+    use WithPalette;
+
     protected string $view = 'moonshine-apexcharts::components.metrics.wrapped.line-chart';
 
     /** @var array<int, Line> */
@@ -128,6 +131,7 @@ class LineChartMetric extends ApexChartMetric
             ...parent::viewData(),
             'labels' => $this->getLabels(),
             'lines' => $this->getLines(),
+            'palette' => $this->getPalette(),
         ];
     }
 }

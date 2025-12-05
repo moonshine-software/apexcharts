@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace MoonShine\Apexcharts\Components;
 
 use Closure;
+use MoonShine\Apexcharts\Traits\WithPalette;
 
 class DonutChartMetric extends ApexChartMetric
 {
+    use WithPalette;
+
     protected string $view = 'moonshine-apexcharts::components.metrics.wrapped.donut-chart';
 
     protected array $values = [];
@@ -72,6 +75,7 @@ class DonutChartMetric extends ApexChartMetric
             'labels' => $this->getLabels(),
             'values' => $this->getValues(),
             'decimals' => $this->getDecimals(),
+            'palette' => $this->getPalette(),
         ];
     }
 }

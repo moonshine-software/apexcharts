@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace MoonShine\Apexcharts\Components;
 
 use Closure;
+use MoonShine\Apexcharts\Traits\WithPalette;
 use MoonShine\AssetManager\Js;
 use MoonShine\UI\Components\Metrics\Wrapped\Metric;
 
 class RawChartMetric extends Metric
 {
+    use WithPalette;
+
     protected string $view = 'moonshine-apexcharts::components.metrics.wrapped.raw-data-chart';
 
     protected array $config = [];
@@ -63,6 +66,11 @@ class RawChartMetric extends Metric
 
         if (!isset($config['chart']['height'])) {
             $config['chart']['height'] = 300;
+        }
+
+        $palette = $this->getPalette();
+        if ($palette && !isset($config['theme']['palette'])) {
+            $config['theme']['palette'] = $palette;
         }
 
         return $config;
