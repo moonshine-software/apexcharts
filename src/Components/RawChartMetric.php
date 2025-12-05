@@ -7,11 +7,13 @@ namespace MoonShine\Apexcharts\Components;
 use Closure;
 use MoonShine\Apexcharts\Traits\WithPalette;
 use MoonShine\Apexcharts\Traits\WithEvents;
+use MoonShine\Apexcharts\Traits\WithHeight;
 
 class RawChartMetric extends ApexChartMetric
 {
     use WithPalette;
     use WithEvents;
+    use WithHeight;
 
     protected string $view = 'moonshine-apexcharts::components.metrics.wrapped.raw-data-chart';
 
@@ -37,8 +39,10 @@ class RawChartMetric extends ApexChartMetric
 
         $config = $this->config;
 
-        if (!isset($config['chart']['height'])) {
-            $config['chart']['height'] = 300;
+        if ($this->getHeight() !== null) {
+            $config['chart']['height'] = $this->getHeight();
+        } elseif (!isset($config['chart']['height'])) {
+            $config['chart']['height'] = $this->getDefaultHeight('raw');
         }
 
         $palette = $this->getPalette();

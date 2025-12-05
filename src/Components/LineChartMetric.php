@@ -10,11 +10,13 @@ use MoonShine\Apexcharts\Support\Line;
 use MoonShine\Apexcharts\Support\ChartType;
 use MoonShine\Apexcharts\Traits\WithPalette;
 use MoonShine\Apexcharts\Traits\WithEvents;
+use MoonShine\Apexcharts\Traits\WithHeight;
 
 class LineChartMetric extends ApexChartMetric
 {
     use WithPalette;
     use WithEvents;
+    use WithHeight;
 
     protected string $view = 'moonshine-apexcharts::components.metrics.wrapped.line-chart';
 
@@ -22,8 +24,6 @@ class LineChartMetric extends ApexChartMetric
   protected array $lines = [];
 
     protected bool $withoutSortKeys = false;
-
-    protected int $height = 333;
 
     /**
      * @param array<string, array<numeric>>|Closure $line
@@ -135,6 +135,7 @@ class LineChartMetric extends ApexChartMetric
             'lines' => $this->getLines(),
             'palette' => $this->getPalette(),
             'events' => $this->getEvents(),
+            'height' => $this->getHeight() ?? $this->getDefaultHeight('line'),
         ];
     }
 }

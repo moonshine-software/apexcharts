@@ -7,19 +7,19 @@ namespace MoonShine\Apexcharts\Components;
 use Closure;
 use MoonShine\Apexcharts\Traits\WithPalette;
 use MoonShine\Apexcharts\Traits\WithEvents;
+use MoonShine\Apexcharts\Traits\WithHeight;
 
 class DonutChartMetric extends ApexChartMetric
 {
     use WithPalette;
     use WithEvents;
+    use WithHeight;
 
     protected string $view = 'moonshine-apexcharts::components.metrics.wrapped.donut-chart';
 
     protected array $values = [];
 
     protected int $decimals = 3;
-
-    protected int $height = 350;
 
     public function getDecimals(): int
     {
@@ -79,6 +79,7 @@ class DonutChartMetric extends ApexChartMetric
             'decimals' => $this->getDecimals(),
             'palette' => $this->getPalette(),
             'events' => $this->getEvents(),
+            'height' => $this->getHeight() ?? $this->getDefaultHeight('donut'),
         ];
     }
 }
