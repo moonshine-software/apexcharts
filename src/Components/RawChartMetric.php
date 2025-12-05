@@ -45,9 +45,8 @@ class RawChartMetric extends ApexChartMetric
             $config['chart']['height'] = $this->getDefaultHeight('raw');
         }
 
-        $palette = $this->getPalette();
-        if ($palette && !isset($config['theme']['palette'])) {
-            $config['theme']['palette'] = $palette;
+        if ($this->getPalette() !== null) {
+            $config['theme']['palette'] = $this->getPalette();
         }
 
         return $config;

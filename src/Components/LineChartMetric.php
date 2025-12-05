@@ -133,7 +133,7 @@ class LineChartMetric extends ApexChartMetric
             ...parent::viewData(),
             'labels' => $this->getLabels(),
             'lines' => $this->getLines(),
-            'palette' => $this->getPalette(),
+            'palette' => $this->getPalette() ?? $this->getDefaultPalette(),
             'events' => $this->getEvents(),
             'height' => $this->getHeight() ?? $this->getDefaultHeight('line'),
         ];

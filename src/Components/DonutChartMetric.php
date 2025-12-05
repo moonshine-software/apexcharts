@@ -77,7 +77,7 @@ class DonutChartMetric extends ApexChartMetric
             'labels' => $this->getLabels(),
             'values' => $this->getValues(),
             'decimals' => $this->getDecimals(),
-            'palette' => $this->getPalette(),
+            'palette' => $this->getPalette() ?? $this->getDefaultPalette(),
             'events' => $this->getEvents(),
             'height' => $this->getHeight() ?? $this->getDefaultHeight('donut'),
         ];

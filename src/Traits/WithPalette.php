@@ -8,7 +8,7 @@ use Closure;
 
 trait WithPalette
 {
-    protected string $palette = '';
+    protected ?string $palette = null;
 
     /**
      * @param int|string|Closure $palette
@@ -30,8 +30,16 @@ trait WithPalette
         return $this;
     }
 
-    public function getPalette(): string
+    public function getPalette(): ?string
     {
-        return $this->palette ?: config('moonshine_apexcharts.default_palette', 'palette6');
+        return $this->palette;
+    }
+
+    /**
+     * Get default palette from config
+     */
+    protected function getDefaultPalette(): string
+    {
+        return config('moonshine_apexcharts.default_palette', 'palette6');
     }
 }
