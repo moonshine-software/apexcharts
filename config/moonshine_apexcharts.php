@@ -24,4 +24,34 @@ return [
     */
 
     'default_palette' => env('APEXCHARTS_DEFAULT_PALETTE', 'palette6'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default Chart Heights
+    |--------------------------------------------------------------------------
+    |
+    | Default heights for different chart types when no explicit height
+    | is set via the height() method. Can be overridden per chart type.
+    | Values are in pixels.
+    |
+    */
+
+    'default_heights' => [
+        'line' => env('APEXCHARTS_DEFAULT_HEIGHT_LINE', 333),
+        'donut' => env('APEXCHARTS_DEFAULT_HEIGHT_DONUT', 350),
+        'raw' => env('APEXCHARTS_DEFAULT_HEIGHT_RAW', 350),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Global Default Height
+    |--------------------------------------------------------------------------
+    |
+    | Fallback height when specific chart type height is not configured.
+    | Can be overridden via APEXCHARTS_DEFAULT_HEIGHT env variable.
+    | Value is in pixels.
+    |
+    */
+
+    'default_height' => env('APEXCHARTS_DEFAULT_HEIGHT', 350),
 ];
