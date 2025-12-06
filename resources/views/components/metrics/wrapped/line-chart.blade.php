@@ -1,14 +1,10 @@
 @props([
     'label' => '',
     'icon' => '',
-    'labels' => [],
-    'lines' => [],
-    'colors' => [],
-    'palette' => '',
+    'config' => [],
+    'events' => '',
     'columnSpanValue' => 12,
     'adaptiveColumnSpanValue' => 12,
-    'height' => 300,
-    'events' => '',
 ])
 <x-moonshine::layout.column
     :colSpan="$columnSpanValue"
@@ -19,11 +15,7 @@
             :attributes="$attributes"
             :label="$label"
             :icon="$icon"
-            :lines="$lines"
-            :colors="$colors"
-            :palette="$palette"
-            :labels="$labels"
-            :height="$height"
+            :config="$config"
             :events="$events"
         />
     </x-moonshine::layout.box>

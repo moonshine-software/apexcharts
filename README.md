@@ -76,6 +76,12 @@ LineChartMetric::make('Sales Data')
     ], [ChartType::AREA, ChartType::LINE, ChartType::COLUMN]);
 ```
 
+<picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./art/line_chart_metric_dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="./art/line_chart_metric.png">
+    <img alt="windows" src="./art/line_chart_metric.png">
+</picture>
+
 ### Donut Chart
 
 ```php
@@ -90,6 +96,12 @@ DonutChartMetric::make('Traffic Sources')
     ])
     ->palette(2);
 ```
+
+<picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./art/donut_chart_metric_dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="./art/donut_chart_metric.png">
+    <img alt="windows" src="./art/donut_chart_metric.png">
+</picture>
 
 ### Raw Chart
 
@@ -129,69 +141,38 @@ RawChartMetric::make('Interactive Radar Chart')
 
 Available for all chart types:
 
-| Method | Type | Description |
-|--------|------|-------------|
-| `->colors(array $colors)` | array | Override palette with custom colors |
-| `->columnSpan(int $span)` | int | Number of grid columns (1-12) |
-| `->height(int $height)` | int | Chart height in pixels |
-| `->palette(int|string $palette)` | int/string | Color palette (1-10 or palette name) |
-| `->setEvents(string $js)` | string | JavaScript event handlers |
-| `->withoutWrapper()` | - | Remove box wrapper for custom layouts |
-
-### Color Palettes
-
-| Palette | Preview | Colors |
-|---------|---------|--------|
-| `palette1` | Vibrant | `#008FFB`, `#00E396`, `#FEB019`, `#FF4560`, `#775DD0` |
-| `palette2` | Material | `#3f51b5`, `#03a9f4`, `#4caf50`, `#f9ce1d`, `#FF9800` |
-| `palette3` | Muted | `#33b2df`, `#546E7A`, `#d4526e`, `#13d8aa`, `#A5978B` |
-| `palette4` | Pastel | `#4ecdc4`, `#c7f464`, `#81D4FA`, `#546E7A`, `#fd6a6a` |
-| `palette5` | Balanced | `#2b908f`, `#f9a3a4`, `#90ee7e`, `#fa4443`, `#69d2e7` |
-| `palette6` | Professional | `#449DD1`, `#F86624`, `#EA3546`, `#662E9B`, `#C5D86D` |
-| `palette7` | Warm | `#D7263D`, `#1B998B`, `#2E294E`, `#F46036`, `#E2C044` |
-| `palette8` | Purple/Orange | `#662E9B`, `#F86624`, `#F9C80E`, `#EA3546`, `#43BCCD` |
-| `palette9` | Earth Tones | `#5C4742`, `#A5978B`, `#8D5B4C`, `#5A2A27`, `#C4BBAF` |
-| `palette10` | Blue/Purple | `#A300D6`, `#7D02EB`, `#5653FE`, `#2983FF`, `#00B1F2` |
+- `->withoutWrapper()` - Remove box wrapper for custom layouts
+- `->columnSpan(int $span)` - Number of grid columns (1-12)
+- `->colors(array $colors)` - Override palette with custom colors
+- `->palette(int|string $palette)` - Color palette (1-10 or palette name)
+- `->height(int $height)` - Chart height in pixels
+- `->setEvents(string $js)` - JavaScript event handlers
 
 ### LineChartMetric
 
-#### Additional Methods
-
-| Method | Type | Description |
-|--------|------|-------------|
-| `->addLine(Line $line)` | Line | Add a single line |
-| `->addLines(array $lines)` | Line[] | Add multiple lines |
-| `->line(array $data, array $types)` | array | Legacy array approach |
-| `->withoutSortKeys()` | - | Preserve original key order |
-
-#### Line Helper
+- `->addLine(Line $line)` - Add a single line
+- `->addLines(array $lines)` - Add multiple lines
+- `->line(array $data, array $types)` - Legacy array approach
+- `->withoutSortKeys()` - Preserve original key order
 
 ```php
 Line::make(string $name, array $data)
-    ->line()                     // Line chart type
-    ->area()                     // Area chart type
-    ->column()                   // Column chart type
-    ->color('#FF5722')           // Custom color
-    ->name('New Name')           // Change display name
-    ->data([...])                // Update data
+    ->line()                // Line chart type
+    ->area()                // Area chart type
+    ->column()              // Column chart type
+    ->color('#FF5722')      // Custom color
+    ->name('New Name')      // Change display name
+    ->data([...])           // Update data
 ```
 
 ### DonutChartMetric
 
-#### Additional Methods
-
-| Method | Type | Description |
-|--------|------|-------------|
-| `->values(array $values)` | array | Chart data (key => value) |
-| `->decimals(int $decimals)` | int | Decimal places (0-100) |
+- `->values(array $values)` - Chart data (key => value)
+- `->decimals(int $decimals)` - Decimal places (0-100)
 
 ### RawChartMetric
 
-#### Additional Methods
-
-| Method | Type | Description |
-|--------|------|-------------|
-| `->config(array $config)` | array | Full ApexCharts configuration |
+- `->config(array $config)` - Full ApexCharts configuration
 
 ## Events
 
@@ -209,24 +190,6 @@ RawChartMetric::make('Interactive Chart')
             }
         }
     JS);
-```
-
-## Configuration
-
-Create your own `config/moonshine_apexcharts.php` to customize defaults:
-
-```php
-<?php
-
-return [
-    'default_palette' => 'palette6',
-];
-```
-
-Or use environment variable:
-
-```env
-APEXCHARTS_DEFAULT_PALETTE=palette6
 ```
 
 ## License

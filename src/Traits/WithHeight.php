@@ -36,7 +36,14 @@ trait WithHeight
         return $this->height;
     }
 
-    
+    /**
+     * Check if height is explicitly set
+     */
+    public function hasHeight(): bool
+    {
+        return $this->height !== null;
+    }
+
     /**
      * Get default height from config for a specific chart type
      */

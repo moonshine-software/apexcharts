@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace MoonShine\Apexcharts\Components;
 
 use Closure;
-use MoonShine\Apexcharts\Traits\WithPalette;
-use MoonShine\Apexcharts\Traits\WithColors;
+use MoonShine\Apexcharts\Traits\WithColorScheme;
 use MoonShine\Apexcharts\Traits\WithEvents;
 use MoonShine\Apexcharts\Traits\WithHeight;
 
 class RawChartMetric extends ApexChartMetric
 {
-    use WithPalette;
-    use WithColors;
+    use WithColorScheme;
     use WithEvents;
     use WithHeight;
 
@@ -41,17 +39,15 @@ class RawChartMetric extends ApexChartMetric
 
         $config = $this->config;
 
-        if ($this->getHeight() !== null) {
+        if ($this->hasHeight()) {
             $config['chart']['height'] = $this->getHeight();
         } elseif (!isset($config['chart']['height'])) {
             $config['chart']['height'] = $this->getDefaultHeight('raw');
         }
 
-        // Handle colors and palette with proper priority
-        // Colors have priority over palette
         if ($this->hasColors()) {
             $config['colors'] = $this->getColors();
-        } elseif ($this->getPalette() !== null) {
+        } elseif ($this->hasPalette()) {
             $config['theme']['palette'] = $this->getPalette();
         }
 

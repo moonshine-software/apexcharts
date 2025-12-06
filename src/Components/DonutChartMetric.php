@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace MoonShine\Apexcharts\Components;
 
 use Closure;
-use MoonShine\Apexcharts\Traits\WithPalette;
-use MoonShine\Apexcharts\Traits\WithColors;
+use MoonShine\Apexcharts\Traits\WithColorScheme;
 use MoonShine\Apexcharts\Traits\WithEvents;
 use MoonShine\Apexcharts\Traits\WithHeight;
 
 class DonutChartMetric extends ApexChartMetric
 {
-    use WithPalette;
-    use WithColors;
+    use WithColorScheme;
     use WithEvents;
     use WithHeight;
 
@@ -69,6 +67,61 @@ class DonutChartMetric extends ApexChartMetric
         return $this;
     }
 
+    public function getConfig(): array
+    {
+        $config = [
+            'series' => $this->getValues(),
+            'labels' => $this->getLabels(),
+            'chart' => [
+                'type' => 'donut',
+                'height' => $this->getHeight() ?? $this->getDefaultHeight('donut'),
+                'background' => 'transparent',
+                'foreColor' => '#6a778f',
+            ],
+            'tooltip' => [
+                'y' => [
+                    'theme' => 'dark'
+                ],
+                'theme' => 'dark'
+            ],
+            'stroke' => [
+                'colors' => ['transparent'],
+            ],
+            'plotOptions' => [
+                'pie' => [
+                    'expandOnClick' => false,
+                    'donut' => [
+                        'labels' => [
+                            'show' => true,
+                            'total' => [
+                                'label' => $this->label,
+                                'showAlways' => false,
+                                'show' => true
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'legend' => [
+                'position' => 'bottom',
+                'offsetY' => 10,
+                'itemMargin' => [
+                    'horizontal' => 6,
+                    'vertical' => 6,
+                ],
+            ],
+        ];
+
+        if ($this->hasColors()) {
+            $config['colors'] = $this->getColors();
+        } else {
+            $config['theme']['mode'] = 'dark';
+            $config['theme']['palette'] = $this->getPalette() ?? $this->getDefaultPalette();
+        }
+
+        return $config;
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -76,13 +129,9 @@ class DonutChartMetric extends ApexChartMetric
     {
         return [
             ...parent::viewData(),
-            'labels' => $this->getLabels(),
-            'values' => $this->getValues(),
-            'decimals' => $this->getDecimals(),
-            'colors' => $this->getColors(),
-            'palette' => $this->getPalette() ?? $this->getDefaultPalette(),
+            'config' => $this->getConfig(),
             'events' => $this->getEvents(),
-            'height' => $this->getHeight() ?? $this->getDefaultHeight('donut'),
+            'decimals' => $this->getDecimals(),
         ];
     }
 }

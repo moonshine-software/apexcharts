@@ -6,9 +6,24 @@ namespace MoonShine\Apexcharts\Traits;
 
 use Closure;
 
-trait WithPalette
+trait WithColorScheme
 {
+    protected array $colors = [];
     protected ?string $palette = null;
+
+    /**
+     * Set chart colors
+     *
+     * @param string[]|Closure $colors
+     */
+    public function colors(array|Closure $colors): static
+    {
+        $this->colors = $colors instanceof Closure
+            ? $colors()
+            : $colors;
+
+        return $this;
+    }
 
     /**
      * @param int|string|Closure $palette
@@ -30,9 +45,35 @@ trait WithPalette
         return $this;
     }
 
+    /**
+     * Get chart colors
+     *
+     * @return string[]
+     */
+    public function getColors(): array
+    {
+        return $this->colors;
+    }
+
+    /**
+     * Check if colors are set
+     */
+    public function hasColors(): bool
+    {
+        return !empty($this->colors);
+    }
+
     public function getPalette(): ?string
     {
         return $this->palette;
+    }
+
+    /**
+     * Check if palette is set
+     */
+    public function hasPalette(): bool
+    {
+        return $this->palette !== null;
     }
 
     /**

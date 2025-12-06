@@ -8,15 +8,13 @@ use Closure;
 use Illuminate\Support\Collection;
 use MoonShine\Apexcharts\Support\Line;
 use MoonShine\Apexcharts\Support\ChartType;
-use MoonShine\Apexcharts\Traits\WithPalette;
-use MoonShine\Apexcharts\Traits\WithColors;
+use MoonShine\Apexcharts\Traits\WithColorScheme;
 use MoonShine\Apexcharts\Traits\WithEvents;
 use MoonShine\Apexcharts\Traits\WithHeight;
 
 class LineChartMetric extends ApexChartMetric
 {
-    use WithPalette;
-    use WithColors;
+    use WithColorScheme;
     use WithEvents;
     use WithHeight;
 
@@ -126,6 +124,38 @@ class LineChartMetric extends ApexChartMetric
         return $this;
     }
 
+    public function getConfig(): array
+    {
+        $config = [
+            'series' => array_map(fn($line) => [
+                'name' => $line->getName(),
+                'data' => array_values($line->getData()),
+                'type' => $line->getType()->value,
+            ] + ($line->getColor() ? ['color' => $line->getColor()] : []), $this->getLines()),
+            'labels' => $this->getLabels(),
+            'chart' => [
+                'type' => 'line',
+                'height' => $this->getHeight() ?? $this->getDefaultHeight('line'),
+            ],
+            'yaxis' => [
+                'title' => [
+                    'text' => $this->label,
+                    'style' => [
+                        'fontWeight' => 400,
+                    ],
+                ],
+            ],
+        ];
+
+        if ($this->hasColors()) {
+            $config['colors'] = $this->getColors();
+        } else {
+            $config['theme']['palette'] = $this->getPalette() ?? $this->getDefaultPalette();
+        }
+
+        return $config;
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -133,12 +163,8 @@ class LineChartMetric extends ApexChartMetric
     {
         return [
             ...parent::viewData(),
-            'labels' => $this->getLabels(),
-            'lines' => $this->getLines(),
-            'colors' => $this->getColors(),
-            'palette' => $this->getPalette() ?? $this->getDefaultPalette(),
+            'config' => $this->getConfig(),
             'events' => $this->getEvents(),
-            'height' => $this->getHeight() ?? $this->getDefaultHeight('line'),
         ];
     }
 }
