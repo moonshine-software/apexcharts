@@ -9,12 +9,14 @@ use Illuminate\Support\Collection;
 use MoonShine\Apexcharts\Support\Line;
 use MoonShine\Apexcharts\Support\ChartType;
 use MoonShine\Apexcharts\Traits\WithPalette;
+use MoonShine\Apexcharts\Traits\WithColors;
 use MoonShine\Apexcharts\Traits\WithEvents;
 use MoonShine\Apexcharts\Traits\WithHeight;
 
 class LineChartMetric extends ApexChartMetric
 {
     use WithPalette;
+    use WithColors;
     use WithEvents;
     use WithHeight;
 
@@ -133,6 +135,7 @@ class LineChartMetric extends ApexChartMetric
             ...parent::viewData(),
             'labels' => $this->getLabels(),
             'lines' => $this->getLines(),
+            'colors' => $this->getColors(),
             'palette' => $this->getPalette() ?? $this->getDefaultPalette(),
             'events' => $this->getEvents(),
             'height' => $this->getHeight() ?? $this->getDefaultHeight('line'),

@@ -6,12 +6,14 @@ namespace MoonShine\Apexcharts\Components;
 
 use Closure;
 use MoonShine\Apexcharts\Traits\WithPalette;
+use MoonShine\Apexcharts\Traits\WithColors;
 use MoonShine\Apexcharts\Traits\WithEvents;
 use MoonShine\Apexcharts\Traits\WithHeight;
 
 class DonutChartMetric extends ApexChartMetric
 {
     use WithPalette;
+    use WithColors;
     use WithEvents;
     use WithHeight;
 
@@ -77,6 +79,7 @@ class DonutChartMetric extends ApexChartMetric
             'labels' => $this->getLabels(),
             'values' => $this->getValues(),
             'decimals' => $this->getDecimals(),
+            'colors' => $this->getColors(),
             'palette' => $this->getPalette() ?? $this->getDefaultPalette(),
             'events' => $this->getEvents(),
             'height' => $this->getHeight() ?? $this->getDefaultHeight('donut'),
