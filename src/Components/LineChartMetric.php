@@ -8,15 +8,9 @@ use Closure;
 use Illuminate\Support\Collection;
 use MoonShine\Apexcharts\Support\Line;
 use MoonShine\Apexcharts\Support\ChartType;
-use MoonShine\Apexcharts\Traits\WithColorScheme;
-use MoonShine\Apexcharts\Traits\WithEvents;
-use MoonShine\Apexcharts\Traits\WithHeight;
 
 class LineChartMetric extends ApexChartMetric
 {
-    use WithColorScheme;
-    use WithEvents;
-    use WithHeight;
 
     protected string $view = 'moonshine-apexcharts::components.metrics.wrapped.line-chart';
 

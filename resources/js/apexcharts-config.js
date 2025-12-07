@@ -40,9 +40,6 @@ window.Apex = {
       show: false,
     },
   },
-  theme: {
-    mode: 'light', // Use light mode by default for better text visibility
-  },
   tooltip: {
     theme: 'dark', // Dark tooltips work well in both themes
   },

@@ -10,7 +10,6 @@ class ChartTheme
     use Makeable;
 
     protected ?string $palette = null;
-    protected bool $modeLight = false;
     protected bool $monochromeEnabled = false;
     protected bool $monochromeLight = false;
     protected ?string $monochromeColor = null;
@@ -18,14 +17,12 @@ class ChartTheme
 
     public function __construct(
         int|string|Closure|null $palette = null,
-        bool $modeLight = false,
         bool $monochromeEnabled = false,
         bool $monochromeLight = false,
         ?string $monochromeColor = null,
         float $monochromeShadeIntensity = 0.65
     ) {
         $this->palette = $palette ? self::resolvePalette($palette) : null;
-        $this->modeLight = $modeLight;
         $this->monochromeEnabled = $monochromeEnabled;
         $this->monochromeLight = $monochromeLight;
         $this->monochromeColor = $monochromeColor;
@@ -56,9 +53,7 @@ class ChartTheme
 
     public function toArray(): array
     {
-        $theme = [
-            'mode' => $this->modeLight ? 'light' : 'dark',
-        ];
+        $theme = [];
 
         if ($this->monochromeEnabled) {
             $theme['monochrome'] = [

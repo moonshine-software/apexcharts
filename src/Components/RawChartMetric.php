@@ -5,15 +5,9 @@ declare(strict_types=1);
 namespace MoonShine\Apexcharts\Components;
 
 use Closure;
-use MoonShine\Apexcharts\Traits\WithColorScheme;
-use MoonShine\Apexcharts\Traits\WithEvents;
-use MoonShine\Apexcharts\Traits\WithHeight;
 
 class RawChartMetric extends ApexChartMetric
 {
-    use WithColorScheme;
-    use WithEvents;
-    use WithHeight;
 
     protected string $view = 'moonshine-apexcharts::components.metrics.wrapped.raw-data-chart';
 
@@ -49,7 +43,7 @@ class RawChartMetric extends ApexChartMetric
             $config['colors'] = $this->getColors();
         }
 
-        if (!isset($config['theme'])) {
+        if ($this->hasTheme()) {
             $config['theme'] = $this->getThemeArray();
         }
 
