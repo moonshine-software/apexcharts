@@ -70,7 +70,7 @@ class DonutChartMetric extends ApexChartMetric
                 'type' => 'donut',
                 'height' => $this->getHeight() ?? $this->getDefaultHeight('donut'),
                 'background' => 'transparent',
-                'foreColor' => '#6b7280', // Universal gray for both themes
+                'foreColor' => '#6b7280',
             ],
             'tooltip' => [
                 'y' => [
@@ -88,7 +88,7 @@ class DonutChartMetric extends ApexChartMetric
                         'labels' => [
                             'show' => true,
                             'total' => [
-                                'label' => $this->label,
+                                'label' => __('moonshine::ui.total'),
                                 'showAlways' => false,
                                 'show' => true
                             ]
