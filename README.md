@@ -58,8 +58,7 @@ use MoonShine\Apexcharts\Support\Line;
 LineChartMetric::make('Sales Data')
     ->addLine(Line::make('Revenue', $revenueData)->area())
     ->addLine(Line::make('Profit', $profitData)->line())
-    ->addLine(Line::make('Costs', $costData)->column())
-    ->palette(6);
+    ->addLine(Line::make('Costs', $costData)->column());
 ```
 
 #### Array Approach
@@ -93,8 +92,7 @@ DonutChartMetric::make('Traffic Sources')
         'Organic' => 2100,
         'Social' => 1850,
         'Referral' => 1200,
-    ])
-    ->palette(2);
+    ]);
 ```
 
 <picture>
@@ -135,6 +133,36 @@ RawChartMetric::make('Interactive Radar Chart')
     JS);
 ```
 
+## Theme Configuration
+
+The `theme()` method allows you to configure chart appearance with color palettes and monochrome options:
+
+```php
+->theme(
+    int|string|null $palette = null,      // Color palette (1-10) or palette name
+    bool $monochromeEnabled = false,      // Enable monochrome colors
+    bool $monochromeLight = false,        // Monochrome shade direction
+    ?string $monochromeColor = null,      // Custom monochrome base color
+    float $monochromeShadeIntensity = 0.65 // Monochrome shade intensity (0-1)
+)
+```
+
+### Theme Examples
+
+**Simple palette:**
+```php
+->theme(6)  // Use predefined color palette
+```
+
+**Monochrome with custom color:**
+```php
+->theme(
+    monochromeEnabled: true,
+    monochromeColor: '#FF6384',
+    monochromeShadeIntensity: 0.5
+)
+```
+
 ## API Reference
 
 ### Common Methods
@@ -144,7 +172,7 @@ Available for all chart types:
 - `->withoutWrapper()` - Remove box wrapper for custom layouts
 - `->columnSpan(int $span)` - Number of grid columns (1-12)
 - `->colors(array $colors)` - Override palette with custom colors
-- `->palette(int|string $palette)` - Color palette (1-10 or palette name)
+- `->theme(...)` - Configure theme with palette and options
 - `->height(int $height)` - Chart height in pixels
 - `->setEvents(string $js)` - JavaScript event handlers
 
@@ -191,6 +219,63 @@ RawChartMetric::make('Interactive Chart')
         }
     JS);
 ```
+
+## Grid Layout
+
+Charts can be arranged in a responsive grid using MoonShine's `Grid` component and the `columnSpan()` method.
+
+### Basic Grid Usage
+
+```php
+use MoonShine\UI\Components\Layout\Grid;
+use MoonShine\Apexcharts\Components\DonutChartMetric;
+use MoonShine\Apexcharts\Components\LineChartMetric;
+use MoonShine\Apexcharts\Components\RawChartMetric;
+
+Grid::make([
+    DonutChartMetric::make('Traffic Sources')
+        ->values([
+            'Direct' => 3250,
+            'Organic' => 2100,
+            'Social' => 1850,
+            'Referral' => 1200,
+        ])
+        ->theme(2)
+        ->columnSpan(4),
+
+    DonutChartMetric::make('Sales by Category')
+        ->values([
+            'Electronics' => 45320,
+            'Clothing' => 32150,
+            'Food' => 28900,
+            'Books' => 12300,
+        ])
+        ->theme(7)
+        ->columnSpan(4),
+
+    DonutChartMetric::make('User Activity')
+        ->values([
+            'Active' => 1250,
+            'Inactive' => 320,
+            'New' => 180,
+            'Old' => 250,
+        ])
+        ->theme(1)
+        ->columnSpan(4),
+])
+```
+
+<picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./art/donut_chart_metric_column_span_dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="./art/donut_chart_metric_column_span.png">
+    <img alt="Grid layout with donut charts" src="./art/donut_chart_metric_column_span.png">
+</picture>
+
+<picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./art/line_chart_metric_column_span_dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="./art/line_chart_metric_column_span.png">
+    <img alt="Grid layout with line charts" src="./art/line_chart_metric_column_span.png">
+</picture>
 
 ## License
 
