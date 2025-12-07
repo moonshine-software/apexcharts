@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MoonShine\Apexcharts\Support;
 
-enum ChartType: string
+enum SeriesType: string
 {
     case LINE = 'line';
     case AREA = 'area';

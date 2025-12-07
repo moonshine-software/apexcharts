@@ -1,25 +1,36 @@
 import ApexCharts from 'apexcharts'
 import './apexcharts-config.js'
 
+function initChart(element, config, events, chartName) {
+  if (!config) {
+    console.error(`${chartName}: config is missing`)
+    return null
+  }
+
+  if (events && events !== '{}') {
+    if (!config.chart) {
+      config.chart = {}
+    }
+    config.chart.events = events
+  }
+
+  const instance = new ApexCharts(element, config)
+
+  setTimeout(() => {
+    instance.render()
+  }, 300)
+
+  return instance
+}
+
 document.addEventListener('alpine:init', () => {
   Alpine.data('donutChart', (options = {}) => ({
     apexchartsInstance: null,
     config: options.config || {},
     events: options.events || '{}',
     decimals: options.decimals || 3,
+
     init() {
-      if (!this.config) {
-        console.error('DonutChart: config is missing')
-        return
-      }
-
-      if (this.events && this.events !== '{}') {
-        if (!this.config.chart) {
-          this.config.chart = {}
-        }
-        this.config.chart.events = this.events
-      }
-
       if (this.config.plotOptions?.pie?.donut?.labels?.total) {
         this.config.plotOptions.pie.donut.labels.total.formatter = (w) => {
           return Number(w.globals.seriesTotals.reduce((a, b) => a + b, 0).toFixed(this.decimals))
@@ -35,36 +46,17 @@ document.addEventListener('alpine:init', () => {
         }
       }
 
-      this.apexchartsInstance = new ApexCharts(this.$el, this.config)
-
-      setTimeout(() => {
-        this.apexchartsInstance.render()
-      }, 300)
+      this.apexchartsInstance = initChart(this.$el, this.config, this.events, 'DonutChart')
     }
   }))
 
-  Alpine.data('charts', (options = {}) => ({
+  Alpine.data('lineChart', (options = {}) => ({
     apexchartsInstance: null,
     config: options.config || {},
     events: options.events || '{}',
+
     init() {
-      if (!this.config) {
-        console.error('Charts: config is missing')
-        return
-      }
-
-      if (this.events && this.events !== '{}') {
-        if (!this.config.chart) {
-          this.config.chart = {}
-        }
-        this.config.chart.events = this.events
-      }
-
-      this.apexchartsInstance = new ApexCharts(this.$el, this.config)
-
-      setTimeout(() => {
-        this.apexchartsInstance.render()
-      }, 300)
+      this.apexchartsInstance = initChart(this.$el, this.config, this.events, 'LineChart')
     }
   }))
 
@@ -72,24 +64,9 @@ document.addEventListener('alpine:init', () => {
     apexchartsInstance: null,
     config: options.config || {},
     events: options.events || '{}',
+
     init() {
-      if (!this.config) {
-        console.error('RawDataChart: config is missing')
-        return
-      }
-
-      if (this.events && this.events !== '{}') {
-        if (!this.config.chart) {
-          this.config.chart = {}
-        }
-        this.config.chart.events = this.events
-      }
-
-      this.apexchartsInstance = new ApexCharts(this.$el, this.config)
-
-      setTimeout(() => {
-        this.apexchartsInstance.render()
-      }, 300)
+      this.apexchartsInstance = initChart(this.$el, this.config, this.events, 'RawDataChart')
     }
   }))
 })

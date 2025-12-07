@@ -17,7 +17,7 @@
 
 <div
     {{ $attributes->merge(['class' => 'chart']) }}
-    x-data="charts({
+    x-data="lineChart({
         config: @js($config),
         events: {!! $events !!}
     })"

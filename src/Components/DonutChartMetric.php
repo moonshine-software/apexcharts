@@ -8,7 +8,6 @@ use Closure;
 
 class DonutChartMetric extends ApexChartMetric
 {
-
     protected string $view = 'moonshine-apexcharts::components.metrics.wrapped.donut-chart';
 
     protected array $values = [];

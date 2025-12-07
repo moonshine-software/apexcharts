@@ -49,30 +49,14 @@ php artisan vendor:publish --tag=moonshine-apexcharts-config
 
 ### Line Chart
 
-#### Typed Approach (Recommended)
-
 ```php
 use MoonShine\Apexcharts\Components\LineChartMetric;
-use MoonShine\Apexcharts\Support\Line;
+use MoonShine\Apexcharts\Support\SeriesItem;
 
 LineChartMetric::make('Sales Data')
-    ->addLine(Line::make('Revenue', $revenueData)->area())
-    ->addLine(Line::make('Profit', $profitData)->line())
-    ->addLine(Line::make('Costs', $costData)->column());
-```
-
-#### Array Approach
-
-```php
-use MoonShine\Apexcharts\Components\LineChartMetric;
-use MoonShine\Apexcharts\Support\ChartType;
-
-LineChartMetric::make('Sales Data')
-    ->line([
-        'Revenue' => $revenueData,
-        'Profit' => $profitData,
-        'Costs' => $costData,
-    ], [ChartType::AREA, ChartType::LINE, ChartType::COLUMN]);
+    ->series(SeriesItem::make('Revenue', $revenueData)->area())
+    ->series(SeriesItem::make('Profit', $profitData)->line())
+    ->series(SeriesItem::make('Costs', $costData)->column());
 ```
 
 <picture>
@@ -178,13 +162,11 @@ Available for all chart types:
 
 ### LineChartMetric
 
-- `->addLine(Line $line)` - Add a single line
-- `->addLines(array $lines)` - Add multiple lines
-- `->line(array $data, array $types)` - Legacy array approach
+- `->series(array|SeriesItem $series)` - Add series
 - `->withoutSortKeys()` - Preserve original key order
 
 ```php
-Line::make(string $name, array $data)
+SeriesItem::make(string $name, array $data)
     ->line()                // Line chart type
     ->area()                // Area chart type
     ->column()              // Column chart type

@@ -6,97 +6,51 @@ namespace MoonShine\Apexcharts\Components;
 
 use Closure;
 use Illuminate\Support\Collection;
-use MoonShine\Apexcharts\Support\Line;
-use MoonShine\Apexcharts\Support\ChartType;
+use MoonShine\Apexcharts\Support\SeriesItem;
+use MoonShine\Apexcharts\Support\SeriesType;
 
 class LineChartMetric extends ApexChartMetric
 {
-
     protected string $view = 'moonshine-apexcharts::components.metrics.wrapped.line-chart';
 
-    /** @var array<int, Line> */
-  protected array $lines = [];
+    /** @var array<int, SeriesItem> */
+    protected array $series = [];
 
     protected bool $withoutSortKeys = false;
 
     /**
-     * @param array<string, array<numeric>>|Closure $line
-     * @param string|string[]|Closure|null $color
-     * @param string|string[]|Closure $type
+     * @param SeriesItem|array<int,SeriesItem> $series
      */
-    public function line(
-        array|Closure $line,
-        string|array|Closure $color = null,
-        string|array|Closure|ChartType $type = ChartType::LINE
-    ): static {
-        $linesData = $line instanceof Closure ? $line() : $line;
-        $typesData = $type instanceof Closure ? $type() : $type;
-        $colorsData = $color instanceof Closure ? $color() : $color;
-
-        // Convert single ChartType to array for compatibility
-        if ($typesData instanceof ChartType) {
-            $typesData = [$typesData];
-        }
-
-        $typeArray = is_array($typesData) ? array_values($typesData) : [$typesData];
-        $colorArray = is_array($colorsData) ? array_values($colorsData) : ($colorsData ? [$colorsData] : []);
-
-        $lineIndex = 0;
-        foreach ($linesData as $name => $data) {
-            // Convert string types to ChartType enum using built-in from() method
-            $lineType = $typeArray[$lineIndex] ?? $typeArray[0] ?? ChartType::LINE;
-
-            if (is_string($lineType)) {
-                $lineType = ChartType::from($lineType);
-            }
-
-            $lineColor = $colorArray[$lineIndex] ?? null;
-
-            $lineObj = Line::make($name, $data)->type($lineType);
-            if ($lineColor) {
-                $lineObj->color($lineColor);
-            }
-            $this->lines[] = $lineObj;
-
-            $lineIndex++;
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Line $line
-     */
-    public function addLine(Line $line): static
+    public function series(array|SeriesItem $series): static
     {
-        $this->lines[] = $line;
-        return $this;
-    }
-
-    /**
-     * @param array<int, Line> $lines
-     */
-    public function addLines(array $lines): static
-    {
-        foreach ($lines as $line) {
-            $this->addLine($line);
+        if (is_array($series)) {
+            foreach ($series as $seriesItem) {
+                $this->series[] = $seriesItem;
+            }
+        } else {
+            $this->series[] = $series;
         }
+
         return $this;
     }
 
     public function getLabels(): array
     {
-        return collect($this->getLines())
-            ->mapWithKeys(static fn (Line $line): mixed => [$line->getName() => $line->getData()])
+        return collect($this->getSeries())
+            ->mapWithKeys(
+                static fn (SeriesItem $seriesItem): array => [
+                    $seriesItem->getName() => $seriesItem->getData()
+                ]
+            )
             ->collapse()
             ->when(! $this->isWithoutSortKeys(), static fn ($items): Collection => $items->sortKeys())
             ->keys()
             ->toArray();
     }
 
-    public function getLines(): array
+    public function getSeries(): array
     {
-        return $this->lines;
+        return $this->series;
     }
 
     public function withoutSortKeys(): static
@@ -118,44 +72,61 @@ class LineChartMetric extends ApexChartMetric
         return $this;
     }
 
+    protected function getSeriesArray(): array
+    {
+        $result = [];
+
+        foreach ($this->getSeries() as $seriesItem) {
+            $seriesData = [
+                'name' => $seriesItem->getName(),
+                'data' => array_values($seriesItem->getData()),
+                'type' => $seriesItem->getType()->value,
+            ];
+
+            if ($seriesItem->getColor()) {
+                $seriesData['color'] = $seriesItem->getColor();
+            }
+
+            $result[] = $seriesData;
+        }
+
+        return $result;
+    }
+
     public function getConfig(): array
     {
         $config = [
-            'series' => array_map(fn($line) => [
-                'name' => $line->getName(),
-                'data' => array_values($line->getData()),
-                'type' => $line->getType()->value,
-            ] + ($line->getColor() ? ['color' => $line->getColor()] : []), $this->getLines()),
+            'series' => $this->getSeriesArray(),
             'labels' => $this->getLabels(),
             'chart' => [
                 'type' => 'line',
                 'height' => $this->getHeight() ?? $this->getDefaultHeight('line'),
-                'foreColor' => '#6b7280', // Universal gray for all labels
+                'foreColor' => '#6b7280',
             ],
             'yaxis' => [
                 'title' => [
                     'text' => $this->label,
                     'style' => [
                         'fontWeight' => 400,
-                        'color' => '#6b7280', // Universal gray for axis title
+                        'color' => '#6b7280',
                     ],
                 ],
                 'labels' => [
                     'style' => [
-                        'colors' => '#6b7280', // Universal gray for y-axis labels
+                        'colors' => '#6b7280',
                     ],
                 ],
             ],
             'xaxis' => [
                 'labels' => [
                     'style' => [
-                        'colors' => '#6b7280', // Universal gray for x-axis labels
+                        'colors' => '#6b7280',
                     ],
                 ],
             ],
             'legend' => [
                 'labels' => [
-                    'colors' => '#6b7280', // Universal gray for legend labels
+                    'colors' => '#6b7280',
                 ],
             ],
         ];

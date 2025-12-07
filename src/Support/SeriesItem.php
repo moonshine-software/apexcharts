@@ -6,13 +6,13 @@ namespace MoonShine\Apexcharts\Support;
 
 use MoonShine\Support\Traits\Makeable;
 
-class Line
+class SeriesItem
 {
     use Makeable;
 
     private string $name;
     private array $data;
-    private ChartType $type = ChartType::LINE;
+    private SeriesType $type = SeriesType::LINE;
     private ?string $color = null;
 
     public function __construct(string $name, array $data)
@@ -33,7 +33,7 @@ class Line
         return $this;
     }
 
-    public function type(ChartType $type): self
+    public function type(SeriesType $type): self
     {
         $this->type = $type;
         return $this;
@@ -47,20 +47,17 @@ class Line
 
     public function line(): self
     {
-        $this->type = ChartType::LINE;
-        return $this;
+        return $this->type(SeriesType::LINE);
     }
 
     public function area(): self
     {
-        $this->type = ChartType::AREA;
-        return $this;
+        return $this->type(SeriesType::AREA);
     }
 
     public function column(): self
     {
-        $this->type = ChartType::COLUMN;
-        return $this;
+        return $this->type(SeriesType::COLUMN);
     }
 
     public function getName(): string
@@ -73,7 +70,7 @@ class Line
         return $this->data;
     }
 
-    public function getType(): ChartType
+    public function getType(): SeriesType
     {
         return $this->type;
     }
