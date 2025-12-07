@@ -8,14 +8,14 @@ window.Apex = {
     zoom: {
       enabled: false,
     },
-    foreColor: '#6b7280', // Neutral gray that works in both light and dark modes
+    foreColor: '#6b7280',
   },
   dataLabels: {
     enabled: false,
   },
   grid: {
     strokeDashArray: 2,
-    borderColor: '#d1d5db', // Light gray border
+    borderColor: '#d1d5db',
   },
   legend: {
     position: 'bottom',
@@ -41,6 +41,6 @@ window.Apex = {
     },
   },
   tooltip: {
-    theme: 'dark', // Dark tooltips work well in both themes
+    theme: 'dark',
   },
 }

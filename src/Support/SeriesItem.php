@@ -82,11 +82,16 @@ class SeriesItem
 
     public function toArray(): array
     {
-        return [
+        $seriesData = [
             'name' => $this->name,
-            'data' => $this->data,
+            'data' => array_values($this->data),
             'type' => $this->type->value,
-            'color' => $this->color,
         ];
+
+        if ($this->color !== null) {
+            $seriesData['color'] = $this->color;
+        }
+
+        return $seriesData;
     }
 }

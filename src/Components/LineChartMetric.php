@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace MoonShine\Apexcharts\Components;
 
-use Closure;
 use Illuminate\Support\Collection;
 use MoonShine\Apexcharts\Support\SeriesItem;
-use MoonShine\Apexcharts\Support\SeriesType;
 
 class LineChartMetric extends ApexChartMetric
 {
@@ -72,22 +70,15 @@ class LineChartMetric extends ApexChartMetric
         return $this;
     }
 
+    /**
+     * @return array<array>
+     */
     protected function getSeriesArray(): array
     {
         $result = [];
 
         foreach ($this->getSeries() as $seriesItem) {
-            $seriesData = [
-                'name' => $seriesItem->getName(),
-                'data' => array_values($seriesItem->getData()),
-                'type' => $seriesItem->getType()->value,
-            ];
-
-            if ($seriesItem->getColor()) {
-                $seriesData['color'] = $seriesItem->getColor();
-            }
-
-            $result[] = $seriesData;
+            $result[] = $seriesItem->toArray();
         }
 
         return $result;
