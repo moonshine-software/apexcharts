@@ -2,7 +2,7 @@
     'label' => '',
     'icon' => '',
     'config' => [],
-    'events' => '',
+    'events' => '{}',
 ])
 
 @if($icon)

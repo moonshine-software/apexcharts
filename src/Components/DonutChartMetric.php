@@ -114,10 +114,9 @@ class DonutChartMetric extends ApexChartMetric
 
         if ($this->hasColors()) {
             $config['colors'] = $this->getColors();
-        } else {
-            $config['theme']['mode'] = 'dark';
-            $config['theme']['palette'] = $this->getPalette() ?? $this->getDefaultPalette();
         }
+
+        $config['theme'] = $this->getThemeArray();
 
         return $config;
     }

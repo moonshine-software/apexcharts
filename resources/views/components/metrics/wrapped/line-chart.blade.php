@@ -2,7 +2,7 @@
     'label' => '',
     'icon' => '',
     'config' => [],
-    'events' => '',
+    'events' => '{}',
     'columnSpanValue' => 12,
     'adaptiveColumnSpanValue' => 12,
 ])

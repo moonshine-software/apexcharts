@@ -47,8 +47,10 @@ class RawChartMetric extends ApexChartMetric
 
         if ($this->hasColors()) {
             $config['colors'] = $this->getColors();
-        } elseif ($this->hasPalette()) {
-            $config['theme']['palette'] = $this->getPalette();
+        }
+
+        if (!isset($config['theme'])) {
+            $config['theme'] = $this->getThemeArray();
         }
 
         return $config;

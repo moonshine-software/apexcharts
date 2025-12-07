@@ -5,11 +5,33 @@ declare(strict_types=1);
 namespace MoonShine\Apexcharts\Traits;
 
 use Closure;
+use MoonShine\Apexcharts\Support\ChartTheme;
 
 trait WithColorScheme
 {
     protected array $colors = [];
     protected ?string $palette = null;
+    protected ?ChartTheme $theme = null;
+
+    public function theme(
+        int|string|Closure|null $palette = null,
+        bool $modeLight = false,
+        bool $monochromeEnabled = false,
+        bool $monochromeLight = false,
+        ?string $monochromeColor = null,
+        float $monochromeShadeIntensity = 0.65
+    ): static {
+        $this->theme = ChartTheme::make(
+            $palette,
+            $modeLight,
+            $monochromeEnabled,
+            $monochromeLight,
+            $monochromeColor,
+            $monochromeShadeIntensity
+        );
+
+        return $this;
+    }
 
     /**
      * Set chart colors
@@ -18,9 +40,7 @@ trait WithColorScheme
      */
     public function colors(array|Closure $colors): static
     {
-        $this->colors = $colors instanceof Closure
-            ? $colors()
-            : $colors;
+        $this->colors = $colors instanceof Closure ? $colors() : $colors;
 
         return $this;
     }
@@ -55,9 +75,6 @@ trait WithColorScheme
         return $this->colors;
     }
 
-    /**
-     * Check if colors are set
-     */
     public function hasColors(): bool
     {
         return !empty($this->colors);
@@ -68,19 +85,22 @@ trait WithColorScheme
         return $this->palette;
     }
 
-    /**
-     * Check if palette is set
-     */
     public function hasPalette(): bool
     {
         return $this->palette !== null;
     }
 
-    /**
-     * Get default palette from config
-     */
     protected function getDefaultPalette(): string
     {
         return config('moonshine_apexcharts.default_palette', 'palette6');
+    }
+
+    protected function getThemeArray(): array
+    {
+        if ($this->theme === null) {
+            $this->theme = ChartTheme::make();
+        }
+
+        return $this->theme->toArray();
     }
 }
