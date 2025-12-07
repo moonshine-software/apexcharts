@@ -136,13 +136,32 @@ class LineChartMetric extends ApexChartMetric
             'chart' => [
                 'type' => 'line',
                 'height' => $this->getHeight() ?? $this->getDefaultHeight('line'),
+                'foreColor' => '#6b7280', // Universal gray for all labels
             ],
             'yaxis' => [
                 'title' => [
                     'text' => $this->label,
                     'style' => [
                         'fontWeight' => 400,
+                        'color' => '#6b7280', // Universal gray for axis title
                     ],
+                ],
+                'labels' => [
+                    'style' => [
+                        'colors' => '#6b7280', // Universal gray for y-axis labels
+                    ],
+                ],
+            ],
+            'xaxis' => [
+                'labels' => [
+                    'style' => [
+                        'colors' => '#6b7280', // Universal gray for x-axis labels
+                    ],
+                ],
+            ],
+            'legend' => [
+                'labels' => [
+                    'colors' => '#6b7280', // Universal gray for legend labels
                 ],
             ],
         ];

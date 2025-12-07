@@ -76,7 +76,7 @@ class DonutChartMetric extends ApexChartMetric
                 'type' => 'donut',
                 'height' => $this->getHeight() ?? $this->getDefaultHeight('donut'),
                 'background' => 'transparent',
-                'foreColor' => '#6a778f',
+                'foreColor' => '#6b7280', // Universal gray for both themes
             ],
             'tooltip' => [
                 'y' => [

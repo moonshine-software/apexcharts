@@ -8,12 +8,14 @@ window.Apex = {
     zoom: {
       enabled: false,
     },
+    foreColor: '#6b7280', // Neutral gray that works in both light and dark modes
   },
   dataLabels: {
     enabled: false,
   },
   grid: {
     strokeDashArray: 2,
+    borderColor: '#d1d5db', // Light gray border
   },
   legend: {
     position: 'bottom',
@@ -37,5 +39,11 @@ window.Apex = {
     axisTicks: {
       show: false,
     },
+  },
+  theme: {
+    mode: 'light', // Use light mode by default for better text visibility
+  },
+  tooltip: {
+    theme: 'dark', // Dark tooltips work well in both themes
   },
 }
