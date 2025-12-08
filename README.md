@@ -62,7 +62,7 @@ LineChartMetric::make('Sales Data')
 <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./art/line_chart_metric_dark.png">
     <source media="(prefers-color-scheme: light)" srcset="./art/line_chart_metric.png">
-    <img alt="windows" src="./art/line_chart_metric.png">
+    <img alt="Line chart metric example" src="./art/line_chart_metric.png">
 </picture>
 
 ### Donut Chart
