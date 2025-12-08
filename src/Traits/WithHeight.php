@@ -16,11 +16,11 @@ trait WithHeight
         $height = (int) $height;
 
         if ($height < 50) {
-            throw new \InvalidArgumentException("Chart height must be at least 50px, got {$height}");
+            throw new \InvalidArgumentException("Chart height must be at least 50px, got $height");
         }
 
         if ($height > 2000) {
-            throw new \InvalidArgumentException("Chart height should not exceed 2000px, got {$height}");
+            throw new \InvalidArgumentException("Chart height should not exceed 2000px, got $height");
         }
 
         $this->height = $height;
@@ -49,7 +49,7 @@ trait WithHeight
      */
     protected function getDefaultHeight(string $chartType): int
     {
-        return config("moonshine_apexcharts.default_heights.{$chartType}")
-            ?? config('moonshine_apexcharts.default_height', 300);
+        return config("moonshine_apexcharts.default_height.$chartType")
+            ?? config('moonshine_apexcharts.fallback_height', 300);
     }
 }

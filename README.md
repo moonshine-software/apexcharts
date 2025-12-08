@@ -17,7 +17,7 @@
 | MoonShine | Moonshine ApexCharts | Currently supported |
 |:---------:|:--------------------:|:-------------------:|
 | \>= v3.0  |      \>= v1.0.0      |         no          |
-| \>= v3.0  |      \>= v2.0.0      |         yes         |
+| \>= v3.0  |      \>= v3.0.0      |         yes         |
 
 ## Installation
 
@@ -108,7 +108,7 @@ RawChartMetric::make('Interactive Radar Chart')
             'categories' => ['Q1', 'Q2', 'Q3', 'Q4', 'Q5'],
         ],
     ])
-    ->setEvents(<<<'JS'
+    ->jsChartEvents(<<<'JS'
         {
             click: (chartContext, options) => {
                 console.log('Chart clicked:', options);
@@ -158,7 +158,7 @@ Available for all chart types:
 - `->colors(array $colors)` - Override palette with custom colors
 - `->theme(...)` - Configure theme with palette and options
 - `->height(int $height)` - Chart height in pixels
-- `->setEvents(string $js)` - JavaScript event handlers
+- `->jsChartEvents(string $js)` - JavaScript event handlers
 
 ### LineChartMetric
 
@@ -190,7 +190,7 @@ Add interactivity with JavaScript events:
 
 ```php
 RawChartMetric::make('Interactive Chart')
-    ->setEvents(<<<'JS'
+    ->jsChartEvents(<<<'JS'
         {
             dataPointSelection: (event, chartContext, config) => {
                 console.log('Selected:', config.w.config.labels[config.dataPointIndex]);

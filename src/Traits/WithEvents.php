@@ -8,14 +8,14 @@ trait WithEvents
 {
     protected string $events = '';
 
-    public function setEvents(string $events): static
+    public function jsChartEvents(string $events): static
     {
         $this->events = $events;
 
         return $this;
     }
 
-    public function getEvents(): string
+    protected function getEvents(): string
     {
         if ($this->events === '') {
             return <<<JS

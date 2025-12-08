@@ -15,6 +15,7 @@ class RawChartMetric extends ApexChartMetric
 
     /**
      * @param array|Closure $config
+     * @return RawChartMetric
      */
     public function config(array|Closure $config): static
     {
@@ -25,7 +26,7 @@ class RawChartMetric extends ApexChartMetric
         return $this;
     }
 
-    public function getConfig(): array
+    private function getConfig(): array
     {
         if (empty($this->config)) {
             return [];

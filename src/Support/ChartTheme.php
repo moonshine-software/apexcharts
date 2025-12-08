@@ -9,14 +9,14 @@ class ChartTheme
 {
     use Makeable;
 
-    protected ?string $palette = null;
+    protected ?int $palette = null;
     protected bool $monochromeEnabled = false;
     protected bool $monochromeLight = false;
     protected ?string $monochromeColor = null;
     protected float $monochromeShadeIntensity = 0.65;
 
     public function __construct(
-        int|string|Closure|null $palette = null,
+        int|Closure|null $palette = null,
         bool $monochromeEnabled = false,
         bool $monochromeLight = false,
         ?string $monochromeColor = null,
@@ -34,21 +34,15 @@ class ChartTheme
         $this->monochromeShadeIntensity = $monochromeShadeIntensity;
     }
 
-    protected static function resolvePalette(int|string|Closure $value): string
+    private static function resolvePalette(int|Closure $number): int
     {
-        $value = $value instanceof Closure ? $value() : $value;
+        $number = $number instanceof Closure ? $number() : $number;
 
-        if (is_numeric($value)) {
-            $number = (int) $value;
-            if ($number < 1 || $number > 10) {
-                throw new \InvalidArgumentException("Palette number must be between 1 and 10, got {$number}");
-            }
-            $palette = "palette{$number}";
-        } else {
-            $palette = $value;
+        if ($number < 1 || $number > 10) {
+            throw new \InvalidArgumentException("Palette number must be between 1 and 10, got $number");
         }
 
-        return $palette;
+        return $number;
     }
 
     public function toArray(): array
@@ -66,7 +60,7 @@ class ChartTheme
                 $theme['monochrome']['color'] = $this->monochromeColor;
             }
         } else {
-            $theme['palette'] = $this->palette ?? config('moonshine_apexcharts.default_palette', 'palette6');
+            $theme['palette'] = $this->palette ?? config('moonshine_apexcharts.default_palette', 6);
         }
 
         return $theme;

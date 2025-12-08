@@ -13,7 +13,7 @@ trait WithColorScheme
     protected ?ChartTheme $theme = null;
 
     public function theme(
-        int|string|Closure|null $palette = null,
+        int|Closure|null $palette = null,
         bool $monochromeEnabled = false,
         bool $monochromeLight = false,
         ?string $monochromeColor = null,
@@ -30,7 +30,7 @@ trait WithColorScheme
         return $this;
     }
 
-    public function hasTheme(): bool
+    protected function hasTheme(): bool
     {
         return $this->theme !== null;
     }
@@ -61,12 +61,12 @@ trait WithColorScheme
      *
      * @return string[]
      */
-    public function getColors(): array
+    protected function getColors(): array
     {
         return $this->colors;
     }
 
-    public function hasColors(): bool
+    protected function hasColors(): bool
     {
         return !empty($this->colors);
     }

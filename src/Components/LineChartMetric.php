@@ -32,7 +32,7 @@ class LineChartMetric extends ApexChartMetric
         return $this;
     }
 
-    public function getLabels(): array
+    private function getLabels(): array
     {
         return collect($this->getSeries())
             ->mapWithKeys(
@@ -41,12 +41,15 @@ class LineChartMetric extends ApexChartMetric
                 ]
             )
             ->collapse()
-            ->when(! $this->isWithoutSortKeys(), static fn ($items): Collection => $items->sortKeys())
+            ->when(
+                ! $this->isWithoutSortKeys(),
+                static fn ($items): Collection => $items->sortKeys()
+            )
             ->keys()
             ->toArray();
     }
 
-    public function getSeries(): array
+    private function getSeries(): array
     {
         return $this->series;
     }
@@ -73,7 +76,7 @@ class LineChartMetric extends ApexChartMetric
     /**
      * @return array<array>
      */
-    protected function getSeriesArray(): array
+    private function getSeriesArray(): array
     {
         $result = [];
 
@@ -84,7 +87,7 @@ class LineChartMetric extends ApexChartMetric
         return $result;
     }
 
-    public function getConfig(): array
+    private function getConfig(): array
     {
         $config = [
             'series' => $this->getSeriesArray(),

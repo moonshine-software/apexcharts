@@ -14,7 +14,7 @@ class DonutChartMetric extends ApexChartMetric
 
     protected int $decimals = 3;
 
-    public function getDecimals(): int
+    private function getDecimals(): int
     {
         return $this->decimals;
     }
@@ -43,12 +43,12 @@ class DonutChartMetric extends ApexChartMetric
     /**
      * @return array<int, mixed>
      */
-    public function getValues(): array
+    private function getValues(): array
     {
         return array_values($this->values);
     }
 
-    public function getLabels(): array
+    private function getLabels(): array
     {
         return array_keys($this->values);
     }
@@ -60,7 +60,7 @@ class DonutChartMetric extends ApexChartMetric
         return $this;
     }
 
-    public function getConfig(): array
+    private function getConfig(): array
     {
         $config = [
             'series' => $this->getValues(),
