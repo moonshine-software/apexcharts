@@ -6,6 +6,9 @@ namespace MoonShine\Apexcharts\Support;
 
 use MoonShine\Support\Traits\Makeable;
 
+/**
+ * @method static static make(string $name, array $data)
+ */
 class SeriesItem
 {
     use Makeable;
