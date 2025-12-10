@@ -37,7 +37,7 @@ class LineChartMetric extends ApexChartMetric
         return collect($this->getSeries())
             ->mapWithKeys(
                 static fn (SeriesItem $seriesItem): array => [
-                    $seriesItem->getName() => $seriesItem->getData()
+                    $seriesItem->getLabel() => $seriesItem->getData()
                 ]
             )
             ->collapse()

@@ -7,26 +7,26 @@ namespace MoonShine\Apexcharts\Support;
 use MoonShine\Support\Traits\Makeable;
 
 /**
- * @method static static make(string $name, array $data)
+ * @method static static make(string $label, array $data)
  */
 class SeriesItem
 {
     use Makeable;
 
-    private string $name;
+    private string $label;
     private array $data;
     private SeriesType $type = SeriesType::LINE;
     private ?string $color = null;
 
-    public function __construct(string $name, array $data)
+    public function __construct(string $label, array $data)
     {
-        $this->name = $name;
+        $this->label = $label;
         $this->data = $data;
     }
 
-    public function name(string $name): self
+    public function label(string $label): self
     {
-        $this->name = $name;
+        $this->label = $label;
         return $this;
     }
 
@@ -63,9 +63,9 @@ class SeriesItem
         return $this->type(SeriesType::COLUMN);
     }
 
-    public function getName(): string
+    public function getLabel(): string
     {
-        return $this->name;
+        return $this->label;
     }
 
     public function getData(): array
@@ -86,7 +86,7 @@ class SeriesItem
     public function toArray(): array
     {
         $seriesData = [
-            'name' => $this->name,
+            'name' => $this->label,
             'data' => array_values($this->data),
             'type' => $this->type->value,
         ];
