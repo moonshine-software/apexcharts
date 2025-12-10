@@ -5,31 +5,16 @@ declare(strict_types=1);
 namespace MoonShine\Apexcharts\Components;
 
 use Closure;
-use MoonShine\AssetManager\Js;
-use MoonShine\UI\Components\Metrics\Wrapped\Metric;
 
-class DonutChartMetric extends Metric
+class DonutChartMetric extends ApexChartMetric
 {
     protected string $view = 'moonshine-apexcharts::components.metrics.wrapped.donut-chart';
 
     protected array $values = [];
 
-    protected array $colors = [];
-
     protected int $decimals = 3;
 
-    protected int $height = 350;
-
-    protected string $events = '';
-
-    protected function assets(): array
-    {
-        return [
-            Js::make('vendor/moonshine-apexcharts/apexcharts.js'),
-        ];
-    }
-
-    public function getDecimals(): int
+    private function getDecimals(): int
     {
         return $this->decimals;
     }
@@ -58,59 +43,75 @@ class DonutChartMetric extends Metric
     /**
      * @return array<int, mixed>
      */
-    public function getValues(): array
+    private function getValues(): array
     {
         return array_values($this->values);
     }
 
-    public function getLabels(): array
+    private function getLabels(): array
     {
         return array_keys($this->values);
     }
 
-    /**
-     * @return string[]
-     */
-    public function getColors(): array
+    public function withoutWrapper(): static
     {
-        return $this->colors;
-    }
-
-    /**
-     * @param string[]|Closure $colors
-     */
-    public function colors(array|Closure $colors): static
-    {
-        $this->colors = $colors instanceof Closure
-            ? $colors()
-            : $colors;
+        $this->customView('moonshine-apexcharts::components.metrics.donut');
 
         return $this;
     }
 
-    public function height(int|string $height): static
+    private function getConfig(): array
     {
-        $this->height = (int)$height;
+        $config = [
+            'series' => $this->getValues(),
+            'labels' => $this->getLabels(),
+            'chart' => [
+                'type' => 'donut',
+                'height' => $this->getHeight() ?? $this->getDefaultHeight('donut'),
+                'background' => 'transparent',
+                'foreColor' => '#6b7280',
+            ],
+            'tooltip' => [
+                'y' => [
+                    'theme' => 'dark'
+                ],
+                'theme' => 'dark'
+            ],
+            'stroke' => [
+                'colors' => ['transparent'],
+            ],
+            'plotOptions' => [
+                'pie' => [
+                    'expandOnClick' => false,
+                    'donut' => [
+                        'labels' => [
+                            'show' => true,
+                            'total' => [
+                                'label' => __('moonshine::ui.total'),
+                                'showAlways' => false,
+                                'show' => true
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'legend' => [
+                'position' => 'bottom',
+                'offsetY' => 10,
+                'itemMargin' => [
+                    'horizontal' => 6,
+                    'vertical' => 6,
+                ],
+            ],
+        ];
 
-        return $this;
-    }
-
-    public function setEvents(string $events): static
-    {
-        $this->events = $events;
-
-        return $this;
-    }
-
-    public function getEvents(): string
-    {
-        if($this->events === '') {
-            return <<<JS
-            {}
-            JS;
+        if ($this->hasColors()) {
+            $config['colors'] = $this->getColors();
         }
 
-        return $this->events;
+        $config['theme'] = $this->getThemeArray();
+
+        return $config;
     }
 
     /**
@@ -119,12 +120,10 @@ class DonutChartMetric extends Metric
     protected function viewData(): array
     {
         return [
-            'labels' => $this->getLabels(),
-            'values' => $this->getValues(),
-            'colors' => $this->getColors(),
-            'decimals' => $this->getDecimals(),
-            'height' => $this->height,
+            ...parent::viewData(),
+            'config' => $this->getConfig(),
             'events' => $this->getEvents(),
+            'decimals' => $this->getDecimals(),
         ];
     }
 }

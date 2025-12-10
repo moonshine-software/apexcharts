@@ -8,12 +8,14 @@ window.Apex = {
     zoom: {
       enabled: false,
     },
+    foreColor: '#6b7280',
   },
   dataLabels: {
     enabled: false,
   },
   grid: {
     strokeDashArray: 2,
+    borderColor: '#d1d5db',
   },
   legend: {
     position: 'bottom',
@@ -37,5 +39,8 @@ window.Apex = {
     axisTicks: {
       show: false,
     },
+  },
+  tooltip: {
+    theme: 'dark',
   },
 }

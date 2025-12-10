@@ -3,24 +3,22 @@
     'icon' => '',
     'config' => [],
     'events' => '{}',
-    'decimals' => 3,
 ])
 
 <div class="flex gap-3">
     @if($icon)
-        <div>{!! $icon !!}</div>
+    <div>{!! $icon !!}</div>
     @endif
 
     @if($label)
-        <h5>{!! $label !!}</h5>
+    <h5>{!! $label !!}</h5>
     @endif
 </div>
 
 <div
     {{ $attributes->merge(['class' => 'chart']) }}
-    x-data="donutChart({
+    x-data="rawDataChart({
         config: @js($config),
-        events: {!! $events !!},
-        decimals: {{ $decimals }}
+        events: {!! $events !!}
     })"
 ></div>

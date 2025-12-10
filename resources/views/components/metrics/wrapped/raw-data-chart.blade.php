@@ -2,16 +2,16 @@
     'label' => '',
     'icon' => '',
     'config' => [],
-    'events' => '{}',
     'columnSpanValue' => 12,
     'adaptiveColumnSpanValue' => 12,
+    'events' => '{}',
 ])
 <x-moonshine::layout.column
     :colSpan="$columnSpanValue"
     :adaptiveColSpan="$adaptiveColumnSpanValue"
 >
     <x-moonshine::layout.box>
-        <x-moonshine-apexcharts::metrics.line
+        <x-moonshine-apexcharts::metrics.raw-data-chart
             :attributes="$attributes"
             :label="$label"
             :icon="$icon"

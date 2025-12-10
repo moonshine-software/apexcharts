@@ -4,88 +4,54 @@ declare(strict_types=1);
 
 namespace MoonShine\Apexcharts\Components;
 
-use Closure;
 use Illuminate\Support\Collection;
-use MoonShine\AssetManager\Js;
-use MoonShine\UI\Components\Metrics\Wrapped\Metric;
+use MoonShine\Apexcharts\Support\SeriesItem;
 
-class LineChartMetric extends Metric
+class LineChartMetric extends ApexChartMetric
 {
     protected string $view = 'moonshine-apexcharts::components.metrics.wrapped.line-chart';
 
-    protected array $lines = [];
-
-    protected array $colors = [];
-
-    protected array $types = [];
+    /** @var array<int, SeriesItem> */
+    protected array $series = [];
 
     protected bool $withoutSortKeys = false;
 
-    protected int $height = 300;
-
-    protected string $events = '';
-
-    protected function assets(): array
-    {
-        return [
-            Js::make('vendor/moonshine-apexcharts/apexcharts.js'),
-        ];
-    }
-
     /**
-     * @param  array<string, array<numeric>>|Closure  $line
-     * @param  string|string[]|Closure  $color
+     * @param SeriesItem|array<int,SeriesItem> $series
      */
-    public function line(
-        array|Closure $line,
-        string|array|Closure $color = '#7843E9',
-        string|array|Closure $type = 'line'
-    ): static {
-        $lines = $line instanceof Closure ? $line() : $line;
-        $this->lines[] = $lines;
-
-        $color = $color instanceof Closure ? $color() : $color;
-
-        if (is_string($color)) {
-            $this->colors[] = $color;
+    public function series(array|SeriesItem $series): static
+    {
+        if (is_array($series)) {
+            foreach ($series as $seriesItem) {
+                $this->series[] = $seriesItem;
+            }
         } else {
-            $this->colors = $color;
-        }
-
-        $type = $type instanceof Closure ? $type() : $type;
-
-        if (is_string($type)) {
-            $this->types[][] = $type;
-        } else {
-            $this->types[] = $type;
+            $this->series[] = $series;
         }
 
         return $this;
     }
 
-    public function getColors(): array
+    private function getLabels(): array
     {
-        return $this->colors;
-    }
-
-    public function getLabels(): array
-    {
-        return collect($this->getLines())
+        return collect($this->getSeries())
+            ->mapWithKeys(
+                static fn (SeriesItem $seriesItem): array => [
+                    $seriesItem->getName() => $seriesItem->getData()
+                ]
+            )
             ->collapse()
-            ->mapWithKeys(static fn ($item): mixed => $item)
-            ->when(! $this->isWithoutSortKeys(), static fn ($items): Collection => $items->sortKeys())
+            ->when(
+                ! $this->isWithoutSortKeys(),
+                static fn ($items): Collection => $items->sortKeys()
+            )
             ->keys()
             ->toArray();
     }
 
-    public function getLines(): array
+    private function getSeries(): array
     {
-        return $this->lines;
-    }
-
-    public function getTypes(): array
-    {
-        return $this->types;
+        return $this->series;
     }
 
     public function withoutSortKeys(): static
@@ -100,29 +66,72 @@ class LineChartMetric extends Metric
         return $this->withoutSortKeys;
     }
 
-    public function height(int|string $height): static
+    public function withoutWrapper(): static
     {
-        $this->height = (int)$height;
+        $this->customView('moonshine-apexcharts::components.metrics.line');
 
         return $this;
     }
 
-    public function setEvents(string $events): static
+    /**
+     * @return array<array>
+     */
+    private function getSeriesArray(): array
     {
-        $this->events = $events;
+        $result = [];
 
-        return $this;
-    }
-
-    public function getEvents(): string
-    {
-        if($this->events === '') {
-            return <<<JS
-            {}
-            JS;
+        foreach ($this->getSeries() as $seriesItem) {
+            $result[] = $seriesItem->toArray();
         }
 
-        return $this->events;
+        return $result;
+    }
+
+    private function getConfig(): array
+    {
+        $config = [
+            'series' => $this->getSeriesArray(),
+            'labels' => $this->getLabels(),
+            'chart' => [
+                'type' => 'line',
+                'height' => $this->getHeight() ?? $this->getDefaultHeight('line'),
+                'foreColor' => '#6b7280',
+            ],
+            'yaxis' => [
+                'title' => [
+                    'text' => $this->label,
+                    'style' => [
+                        'fontWeight' => 400,
+                        'color' => '#6b7280',
+                    ],
+                ],
+                'labels' => [
+                    'style' => [
+                        'colors' => '#6b7280',
+                    ],
+                ],
+            ],
+            'xaxis' => [
+                'labels' => [
+                    'style' => [
+                        'colors' => '#6b7280',
+                    ],
+                ],
+            ],
+            'legend' => [
+                'labels' => [
+                    'colors' => '#6b7280',
+                ],
+            ],
+        ];
+
+        if ($this->hasColors()) {
+            $config['colors'] = $this->getColors();
+        }
+
+        $config['theme'] = $this->getThemeArray();
+
+        return $config;
     }
 
     /**
@@ -131,11 +140,8 @@ class LineChartMetric extends Metric
     protected function viewData(): array
     {
         return [
-            'labels' => $this->getLabels(),
-            'lines' => $this->getLines(),
-            'colors' => $this->getColors(),
-            'types' => $this->getTypes(),
-            'height' => $this->height,
+            ...parent::viewData(),
+            'config' => $this->getConfig(),
             'events' => $this->getEvents(),
         ];
     }

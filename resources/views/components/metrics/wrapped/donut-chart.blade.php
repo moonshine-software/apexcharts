@@ -1,28 +1,24 @@
 @props([
     'label' => '',
-    'labels' => [],
-    'values' => [],
-    'colors' => [],
+    'icon' => '',
+    'config' => [],
+    'events' => '{}',
     'decimals' => 3,
     'columnSpanValue' => 12,
     'adaptiveColumnSpanValue' => 12,
-    'height' => 350,
-    'events' => '',
 ])
 <x-moonshine::layout.column
     :colSpan="$columnSpanValue"
     :adaptiveColSpan="$adaptiveColumnSpanValue"
 >
-    <x-moonshine::layout.box class="grow">
+    <x-moonshine::layout.box>
         <x-moonshine-apexcharts::metrics.donut
             :attributes="$attributes"
-            :values="$values"
-            :labels="$labels"
-            :colors="$colors"
-            :decimals="$decimals"
-            :title="$label"
-            :height="$height"
+            :label="$label"
+            :icon="$icon"
+            :config="$config"
             :events="$events"
+            :decimals="$decimals"
         />
     </x-moonshine::layout.box>
 </x-moonshine::layout.column>

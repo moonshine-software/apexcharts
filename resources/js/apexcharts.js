@@ -1,53 +1,72 @@
 import ApexCharts from 'apexcharts'
 import './apexcharts-config.js'
 
-const darkModeOptions = {
-  chart: {
-    foreColor: '#6a778f',
-  },
-  grid: {
-    borderColor: '#535A6C',
-  },
-  theme: {
-    mode: 'dark',
-  },
-  tooltip: {
-    theme: 'dark',
-  },
-}
+function initChart(element, config, events, chartName) {
+  if (!config) {
+    console.error(`${chartName}: config is missing`)
+    return null
+  }
 
-const lightModeOptions = {
-  chart: {
-    foreColor: '#64748b',
-  },
-  grid: {
-    borderColor: '#c2c2c2',
-  },
-  theme: {
-    mode: 'light',
-  },
-  tooltip: {
-    theme: 'light',
-  },
+  if (events && events !== '{}') {
+    if (!config.chart) {
+      config.chart = {}
+    }
+    config.chart.events = events
+  }
+
+  const instance = new ApexCharts(element, config)
+
+  setTimeout(() => {
+    instance.render()
+  }, 300)
+
+  return instance
 }
 
 document.addEventListener('alpine:init', () => {
-  Alpine.data('charts', (options = {}) => ({
+  Alpine.data('donutChart', (options = {}) => ({
     apexchartsInstance: null,
+    config: options.config || {},
+    events: options.events || '{}',
+    decimals: options.decimals || 3,
+
     init() {
-      this.apexchartsInstance = new ApexCharts(this.$el, options)
+      if (this.config.plotOptions?.pie?.donut?.labels?.total) {
+        this.config.plotOptions.pie.donut.labels.total.formatter = (w) => {
+          return Number(w.globals.seriesTotals.reduce((a, b) => a + b, 0).toFixed(this.decimals))
+        }
+      }
 
-      const updateThemeOptions = () =>
-        this.apexchartsInstance.updateOptions(
-          Alpine.store('darkMode').on ? darkModeOptions : lightModeOptions,
-        )
+      if (this.config.tooltip?.y) {
+        if (!this.config.tooltip.y.formatter) {
+          this.config.tooltip.y.formatter = (val) => `${val}`
+        }
+        if (this.config.tooltip.y.title && !this.config.tooltip.y.title.formatter) {
+          this.config.tooltip.y.title.formatter = (seriesName) => `${seriesName}:`
+        }
+      }
 
-      setTimeout(() => {
-        this.apexchartsInstance.render()
-        updateThemeOptions()
-      }, 300)
+      this.apexchartsInstance = initChart(this.$el, this.config, this.events, 'DonutChart')
+    }
+  }))
 
-      window.addEventListener('darkMode:toggle', updateThemeOptions)
-    },
+  Alpine.data('lineChart', (options = {}) => ({
+    apexchartsInstance: null,
+    config: options.config || {},
+    events: options.events || '{}',
+
+    init() {
+      this.apexchartsInstance = initChart(this.$el, this.config, this.events, 'LineChart')
+    }
+  }))
+
+  Alpine.data('rawDataChart', (options = {}) => ({
+    apexchartsInstance: null,
+    config: options.config || {},
+    events: options.events || '{}',
+
+    init() {
+      this.apexchartsInstance = initChart(this.$el, this.config, this.events, 'RawDataChart')
+    }
   }))
 })
