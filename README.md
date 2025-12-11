@@ -53,10 +53,49 @@ php artisan vendor:publish --tag=moonshine-apexcharts-config
 use MoonShine\Apexcharts\Components\LineChartMetric;
 use MoonShine\Apexcharts\Support\SeriesItem;
 
-LineChartMetric::make('Sales Data')
-    ->series(SeriesItem::make('Revenue', $revenueData)->area())
-    ->series(SeriesItem::make('Profit', $profitData)->line())
-    ->series(SeriesItem::make('Costs', $costData)->column());
+LineChartMetric::make('Заказы')
+    ->series([
+        SeriesItem::make('Выручка 1', [
+            now()->format('Y-m-d') => 100,
+            now()->addDay()->format('Y-m-d') => 200,
+            now()->addDays(2)->format('Y-m-d') => 500,
+            now()->addDays(3)->format('Y-m-d') => 700,
+        ])->color('#EC4176'),
+        SeriesItem::make('Выручка 2', [
+            now()->format('Y-m-d') => 300,
+            now()->addDay()->format('Y-m-d') => 400,
+            now()->addDays(2)->format('Y-m-d') => 300,
+            now()->addDays(3)->format('Y-m-d') => 800,
+        ])->color('#85737E'),
+        SeriesItem::make('Выручка 3', [
+            now()->format('Y-m-d') => 400,
+            now()->addDay()->format('Y-m-d') => 500,
+            now()->addDays(2)->format('Y-m-d') => 400,
+            now()->addDays(3)->format('Y-m-d') => 600,
+        ])->color('#1e96fc'),
+    ]),
+
+LineChartMetric::make('Заказы')
+    ->series([
+        SeriesItem::make('Выручка 1', [
+            now()->format('Y-m-d') => 100,
+            now()->addDay()->format('Y-m-d') => 200,
+            now()->addDays(2)->format('Y-m-d') => 500,
+            now()->addDays(3)->format('Y-m-d') => 700,
+        ])->line(),
+        SeriesItem::make('Выручка 2', [
+            now()->format('Y-m-d') => 300,
+            now()->addDay()->format('Y-m-d') => 400,
+            now()->addDays(2)->format('Y-m-d') => 300,
+            now()->addDays(3)->format('Y-m-d') => 800,
+        ])->area(),
+        SeriesItem::make('Выручка 3', [
+            now()->format('Y-m-d') => 400,
+            now()->addDay()->format('Y-m-d') => 500,
+            now()->addDays(2)->format('Y-m-d') => 400,
+            now()->addDays(3)->format('Y-m-d') => 600,
+        ])->column(),
+    ])
 ```
 
 <picture>
