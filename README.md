@@ -189,6 +189,22 @@ SparklineChartMetric::make('Trend')
     ->height(40)
 ```
 
+**With icon and custom icon color:**
+
+```php
+use MoonShine\Support\Enums\Color;
+
+SparklineChartMetric::make('Revenue')
+    ->icon('heroicons.currency-dollar')
+    ->iconColor(Color::SUCCESS)
+    ->values([30, 40, 35, 50, 49, 60, 70])
+    ->value('192.10k', prefix: '$')
+    ->change(32, suffix: 'k')
+    ->colors(['#10b981'])
+```
+
+Available icon colors: `Color::PRIMARY`, `Color::SECONDARY`, `Color::SUCCESS`, `Color::WARNING`, `Color::ERROR`, `Color::INFO`
+
 ### Raw Chart
 
 For custom chart types or advanced configurations:
@@ -262,6 +278,8 @@ Available for all chart types:
 - `->colors(array $colors)` - Override palette with custom colors
 - `->theme(...)` - Configure theme with palette and options
 - `->height(int $height)` - Chart height in pixels
+- `->icon(string $icon)` - Set icon (e.g., `'heroicons.chart-bar'`)
+- `->iconColor(Color $color)` - Set icon color using `MoonShine\Support\Enums\Color`
 - `->jsChartEvents(string $js)` - JavaScript event handlers
 
 ### LineChartMetric

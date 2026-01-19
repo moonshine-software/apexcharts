@@ -192,7 +192,7 @@ class SparklineChartMetric extends ApexChartMetric
             ],
             'chart' => [
                 'type' => 'area',
-                'height' => $this->getHeight() ?? 80,
+                'height' => $this->getHeight() ?? 50,
                 'sparkline' => [
                     'enabled' => true,
                 ],
