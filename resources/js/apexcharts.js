@@ -69,4 +69,14 @@ document.addEventListener('alpine:init', () => {
       this.apexchartsInstance = initChart(this.$el, this.config, this.events, 'RawDataChart')
     }
   }))
+
+  Alpine.data('sparklineChart', (options = {}) => ({
+    apexchartsInstance: null,
+    config: options.config || {},
+    events: options.events || '{}',
+
+    init() {
+      this.apexchartsInstance = initChart(this.$el, this.config, this.events, 'SparklineChart')
+    }
+  }))
 })

@@ -43,6 +43,7 @@ php artisan vendor:publish --tag=moonshine-apexcharts-config
 
 - **Line Chart** - Linear, area, and column charts for time-series data with full typing support
 - **Donut Chart** - Circular charts for categorical data
+- **Sparkline Chart** - Minimalist charts for KPI cards with value and change indicators
 - **Raw Chart** - Direct access to ApexCharts configuration for maximum flexibility
 
 ## Quick Start
@@ -123,6 +124,70 @@ DonutChartMetric::make('Traffic Sources')
     <source media="(prefers-color-scheme: light)" srcset="./art/donut_chart_metric.png">
     <img alt="windows" src="./art/donut_chart_metric.png">
 </picture>
+
+### Sparkline Chart
+
+Minimalist area charts perfect for KPI cards and dashboard widgets:
+
+```php
+use MoonShine\Apexcharts\Components\SparklineChartMetric;
+
+// Basic sparkline with value and change indicator
+SparklineChartMetric::make('Revenue')
+    ->values([30, 40, 35, 50, 49, 60, 70, 91, 125])
+    ->value('192.10k', prefix: '$')
+    ->change(32, suffix: 'k')
+    ->colors(['#10b981'])
+```
+
+**With decrease indicator (negative change):**
+
+```php
+SparklineChartMetric::make('Expenses')
+    ->values([100, 95, 90, 85, 80, 75])
+    ->value('45.5k', prefix: '$')
+    ->change(-12, suffix: 'k')
+    ->colors(['#ef4444'])
+```
+
+**Custom change text (localization):**
+
+```php
+SparklineChartMetric::make('Users')
+    ->values([10, 20, 30, 40, 50])
+    ->value('1,234')
+    ->change(156)
+    ->changeText('growth', 'decline')
+```
+
+**Straight line instead of smooth curve:**
+
+```php
+SparklineChartMetric::make('Orders')
+    ->values([5, 8, 12, 15, 20])
+    ->value(847)
+    ->change(23, suffix: '%')
+    ->straight()
+```
+
+**Without gradient fill:**
+
+```php
+SparklineChartMetric::make('Visits')
+    ->values([50, 60, 55, 70, 65])
+    ->value('12.5k')
+    ->withoutGradient()
+    ->colors(['#3b82f6'])
+```
+
+**Minimal sparkline (no value display):**
+
+```php
+SparklineChartMetric::make('Trend')
+    ->values([1, 3, 2, 4, 3, 5, 4, 6])
+    ->colors(['#8b5cf6'])
+    ->height(40)
+```
 
 ### Raw Chart
 
@@ -219,6 +284,25 @@ SeriesItem::make(string $name, array $data)
 - `->values(array $values)` - Chart data (key => value)
 - `->decimals(int $decimals)` - Decimal places (0-100)
 
+### SparklineChartMetric
+
+**Data methods:**
+- `->values(array $values)` - Array of numeric values for the chart
+
+**Value display:**
+- `->value(string|int|float $value, ?string $prefix, ?string $suffix)` - Main value to display
+- `->change(string|int|float $value, ?string $prefix, ?string $suffix)` - Change indicator (positive = green, negative = red)
+- `->changeText(string $increase, string $decrease)` - Custom text for increase/decrease labels
+- `->withoutChangeText()` - Hide increase/decrease text, show only value and icon
+
+**Chart appearance:**
+- `->curve(string $curve)` - Curve type: `'smooth'`, `'straight'`, `'stepline'`, `'monotoneCubic'`
+- `->straight()` - Shortcut for `->curve('straight')`
+- `->gradient(bool $enabled, float $opacityFrom, float $opacityTo)` - Configure gradient fill
+- `->withoutGradient()` - Disable gradient fill (line only)
+- `->strokeWidth(int $width)` - Line thickness (default: 2)
+- `->withoutTooltip()` - Disable hover tooltip
+
 ### RawChartMetric
 
 - `->config(array $config)` - Full ApexCharts configuration
@@ -251,6 +335,7 @@ Charts can be arranged in a responsive grid using MoonShine's `Grid` component a
 use MoonShine\UI\Components\Layout\Grid;
 use MoonShine\Apexcharts\Components\DonutChartMetric;
 use MoonShine\Apexcharts\Components\LineChartMetric;
+use MoonShine\Apexcharts\Components\SparklineChartMetric;
 use MoonShine\Apexcharts\Components\RawChartMetric;
 
 Grid::make([
@@ -297,6 +382,40 @@ Grid::make([
     <source media="(prefers-color-scheme: light)" srcset="./art/line_chart_metric_column_span.png">
     <img alt="Grid layout with line charts" src="./art/line_chart_metric_column_span.png">
 </picture>
+
+### Sparkline KPI Dashboard
+
+```php
+Grid::make([
+    SparklineChartMetric::make('Revenue')
+        ->values([30, 40, 35, 50, 49, 60, 70, 91, 125])
+        ->value('192.10k', prefix: '$')
+        ->change(32, suffix: 'k')
+        ->colors(['#10b981'])
+        ->columnSpan(3),
+
+    SparklineChartMetric::make('Orders')
+        ->values([120, 132, 101, 134, 90, 230, 210])
+        ->value('1,847')
+        ->change(12.5, suffix: '%')
+        ->colors(['#3b82f6'])
+        ->columnSpan(3),
+
+    SparklineChartMetric::make('Customers')
+        ->values([220, 182, 191, 234, 290, 330, 310])
+        ->value('9,432')
+        ->change(8.2, suffix: '%')
+        ->colors(['#8b5cf6'])
+        ->columnSpan(3),
+
+    SparklineChartMetric::make('Refunds')
+        ->values([150, 232, 201, 154, 190, 130, 110])
+        ->value('2.4k', prefix: '$')
+        ->change(-18, suffix: '%')
+        ->colors(['#ef4444'])
+        ->columnSpan(3),
+])
+```
 
 ## License
 
